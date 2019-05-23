@@ -1,0 +1,29 @@
+.tabla_datos{
+		width: 90%;
+		height: 90%;
+		border: 1px solid #63D14A;
+		font-family: arial;
+/*		font-weight: bold;
+		background-color: rgba(0,0,0,0.5);*/
+		text-align: center;
+		border-collapse: collapse;
+	}
+
+.tabla_datos thead{
+	background-color: #49ED25;
+	empty-cells: hide;
+	font-weight: bold
+}
+/*.tabla_datos tr:nth-child(odd) {
+    background-color:#f2f2f2;
+}*/
+.tabla_datos tr:nth-child(even) {
+    background-color:#E1E3E6;
+}
+.caja_busqueda {
+	border: 1px solid #327EF3;
+	background-color:#E1E3E6;
+}
+.label {
+	color: #091895;
+}

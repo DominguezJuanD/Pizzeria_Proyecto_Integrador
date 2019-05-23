@@ -1,0 +1,85 @@
+label{
+
+	font-size: 18px;
+
+	font-weight: bold;
+
+	width: 600px;
+
+}
+
+
+
+input{
+
+	width: 248px;
+
+	background: white;
+
+	color: black;
+
+	font-weight: bold;
+
+	border: ;
+
+}
+
+form table{
+
+	width: 500px;
+
+	border: 5px solid #CCC;
+
+	border-color: black;
+
+}
+
+
+button{
+
+	width: 110px;
+
+	height: 30px;
+
+	background: black;
+
+	color: #36B3F7;
+
+	font-weight: bold;
+
+}
+
+
+
+input.boton{
+
+	width: 110px;
+
+	height: 30px;
+  	background-image:url(boton.jpg);
+
+/*	background: black;
+*/
+	color: #36B3F7;
+
+	font-weight: bold;
+
+}
+
+
+
+a{
+
+	font-style: arial;
+
+}
+
+
+
+body{
+
+	background-repeat: repeat-y;
+
+	width: 100%;
+
+}

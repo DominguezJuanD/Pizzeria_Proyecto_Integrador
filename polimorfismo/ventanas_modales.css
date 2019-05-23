@@ -1,0 +1,159 @@
+/*-------------- ESTO ES PARA LA VENTANA DE clientes-------------*/
+
+#modal {
+  position: absolute;
+  background: #55555;
+  top: -100vh;
+  width: 100%;
+  height: 100vh;
+  transition: all 0.5s;
+}
+#modal #cerrar-modal {
+  background: red;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  left: 93%;
+  position: relative;
+}
+
+#modal #cerrar-modal span {
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mostrar-modal {
+  top: 0 !important;
+}
+
+/*-------------- ESTO ES PARA LA VENTANA DE PROVEEDORES-------------*/
+
+#modal2 {
+  position: absolute;
+  background: #55555;
+  top: -100vh;
+  width: 100%;
+  height: 100vh;
+  transition: all 0.5s;
+}
+#modal2 #cerrar-modal2 {
+  background: red;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  left: 93%;
+  position: relative;
+}
+
+#modal2 #cerrar-modal2 span {
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mostrar-modal2 {
+  top: 0 !important;
+  }
+
+/*-------------- ESTO ES PARA LA VENTANA DE producto-------------*/
+
+#producto {
+  position: absolute;
+  background: #55555;
+  top: -100vh;
+  width: 100%;
+  height: 100vh;
+  transition: all 0.5s;
+}
+#producto #cerrar-producto {
+  background: red;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  left: 93%;
+  position: relative;
+}
+
+#producto #cerrar-producto span {
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mostrar-producto {
+  top: 0 !important;
+  }
+
+/*-------------- ESTO ES PARA LA VENTANA DE lista CLIENTES-------------*/
+
+#listaCliente {
+  position: absolute;
+  background: #55555;
+  top: -100vh;
+  width: 100%;
+  height: 100vh;
+  transition: all 0.5s;
+}
+#listaCliente #cerrar-listaCliente {
+  background: red;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  left: 93%;
+  position: relative;
+}
+
+#listaCliente #cerrar-listaCliente span {
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mostrar-listaCliente {
+  top: 0 !important;
+  }
+
+/*-------------- ESTO ES PARA LA VENTANA DE lista PRODUCTOS-------------*/
+
+#listaProducto {
+  position: absolute;
+  background: #55555;
+  top: -100vh;
+  width: 100%;
+  height: 100vh;
+  transition: all 0.5s;
+}
+#listaProducto #cerrar-listaProducto {
+  background: red;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  left: 93%;
+  position: relative;
+}
+
+#listaProducto #cerrar-listaProducto span {
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/*.mostrar-listaProducto {
+  top: 0 !important;
+  }*/ 
