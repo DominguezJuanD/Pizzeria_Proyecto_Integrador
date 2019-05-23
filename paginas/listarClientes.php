@@ -12,7 +12,7 @@
 
 	<SECTION class="principal" align="center">
 
-		<h1 style="color:#95A9C8"> Listado de Cliente </h1>
+		<h1 style="color:#95A9C8"> Listado de Clientes </h1>
 
 		<br>
 
