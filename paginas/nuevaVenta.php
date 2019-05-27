@@ -120,7 +120,7 @@
                         <td <b>Cantidad </b></td>
                         <td><input type="number" id="Cantidad" value="0"></td>
 
-                        <td align="right"> <br> <input class="btn btn-primary" role="button" type="button" value="Agregar" onclick="agregar_producto(2);" /></td>
+                        <td align="right"> <br> <input class="btn btn-primary" role="button" type="button" value="Agregar" onclick="agregar_producto(1);" /></td>
                       </tr>
 
                   </tr>

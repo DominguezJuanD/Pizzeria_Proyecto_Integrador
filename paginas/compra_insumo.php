@@ -159,7 +159,7 @@
 						<br>
 						<tr>
 							<td> <h5><b> TOTAL $ : </b></h5> </td>
-							<td> <input type="number" name="total" id="total" value="0" readonly="readonly"></td>
+							<td> <input type="number" name="totalC" id="totalC" value="0" readonly="readonly"></td>
 						</tr>
 					</table>
 				</div>
