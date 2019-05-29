@@ -47,7 +47,7 @@
 
                     <b>Seleccionar Cliente : </b>
 
-                    <select name="cliente" id="clientes">
+                    <select name="cliente_proveedor" id="clientes">
                       <option value="0">Cliente:</option>
                       <?php
                       $query = $conexion -> query ("SELECT * FROM persona ");
@@ -83,7 +83,7 @@
                     <input type="text" name="Descuento" id="Descuento" value="0">
 
                     <input type="button" value="Limpiar"  onclick="limpiar();" />
-      							<input type="button" value="Generar Factura" onclick="factura_venta_producto();" />
+      							<input type="button" value="Generar Factura" onclick="factura_venta_producto(1);" />
 
                     <br>
   						</form>

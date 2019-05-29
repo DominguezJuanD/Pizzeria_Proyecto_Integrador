@@ -86,7 +86,7 @@
   								<tr>
                     <td><b>Seleccionar Proveedor: </b></td>
                     <td>
-                    <select name="provedor" id="provedor">
+                    <select name="cliente_proveedor" id="provedor">
                     	<option value="0">proveedor:</option>
                     	<?php
                       $query = $conexion -> query ("SELECT * FROM Proveedores ");
@@ -133,7 +133,7 @@
 									</tr>
   							</table>
   							<input type="button" value="Limpiar"  onclick="limpiar();" />
-  							<input type="button" value="Generar Factura" onclick="factura_compra_insumo();" />
+  							<input type="button" value="Guardar Factura" onclick="factura_compra_insumo(2);" />
   						</form>
   					</fieldset>
   				</td>

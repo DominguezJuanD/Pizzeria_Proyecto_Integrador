@@ -50,69 +50,60 @@
 
 // ========================================guardar factura tipo compra insumo ======================================================
     case 'factura_compra_insumo':
-      // $tabla_cant = $_POST['tabla_cant'];
-      // $tabla_id = $_POST['tabla_id'];
+
       $fecha = date_format(date_create($_POST['fecha']),'Y/m/d');
-      // $ff= explode("/",$fecha);
-      $prove = $_POST['provedor'];
+
+      $prove = $_POST['cliente_proveedor'];
       $formapago = $_POST['formapago'];
       $tipo_factura = $_POST['tipofactura'];
       $descuento = $_POST['Descuento'];
-      // $tabla_id= explode(",",$tabla_id);  //el array tabla_id y tabla_cant me los envia separados por ',' los datos. hago el split
-      // $tabla_cant= explode(",",$tabla_cant);
-      // $tipo = 2;//1-venta 2-compra
+      $tipoCompraVenta = $_POST['tipoCompraVenta'];//1-venta 2-compra
+      $cont=0;
 
-      $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario FROM detalle_novedad WHERE ventaCompra ='$tipo'");
+      $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario, iva FROM detalle_novedad WHERE ventaCompra ='$tipoCompraVenta'");//traigo todo la tabla detalle factura para la carga final
 
       while($fila = $query -> fetch_assoc()){ //busco todos el pedido que esta en detalle novedad
 
         $tabla_cant[$cont] = $fila['cantidad'];
         $tabla_id[$cont] = $fila['idProducto'];
 
-        if ($tipo_factura == 'A') {// hago el calculo si es que es fatura A o factura B
-          $preTotal = round($fila['preUnitario'] * $fila['cantidad'], 3);
-          $totalNetoC+=$preTotal;
-          $totalC = $totalNetoC +$fila['iva'];
-        }else{
-          $iva = 0;
-          $preUnitario = $fila['preUnitario'];
-          $preTotal = $preUnitario * $fila['cantidad'];
-          $totalNetoC+=$preTotal;
+        $preTotal = round($fila['preUnitario'] * $fila['cantidad'], 3);
+        $totalNetoC+=$preTotal;
+        $iva = $fila['iva'];
+        $totalC = $totalNetoC +$iva;
 
-        }
         $tabla_preUni[$cont] = $fila['preUnitario'];
         $tabla_preTotal[$cont] = $preTotal;
         $cont++;
       }
 
       if ($tabla_cant[0] > 0 ){
-        $num_factura = ulti_factura($tipo, $tipo_factura);
+        $num_factura = ulti_factura($tipoCompraVenta, $tipo_factura);// busco el ultimo numero de factura dependiendo si es compra o venta
 
         $total = $total - $descuento;
         //el descuento lo hice general y no por producto kbe el chori
         //por ahora agrego 0 al iva, y compro como cons final
         mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
-        VALUES('$tipo_factura','1','$num_factura','$fecha','$prove','$formapago','$totalNetoC','$iva','$totalC','$tipo')");//1-venta 2-compra
+        VALUES('$tipo_factura','1','$num_factura','$fecha','$prove','$formapago','$totalNetoC','$iva','$totalC','$tipoCompraVenta')");//1-venta 2-compra
 
         $idFactura = idFactura($tipo_factura,$num_factura);
 
         for ($i=0; $i < sizeof($tabla_id); $i++) {
           if ($tabla_id[$i] > 0){
-            // $resultInsumo = mysqli_query($conexion,"SELECT i.precio_compra, si.cantidad FROM stock_insumos as si
-            //   INNER JOIN insumos as i on si.id_insumo = i.id_insumo and i.id_insumo ='$tabla_id[$i]'"); //busco el precio del insumo
-            // $reg_ins = mysqli_fetch_array($resultInsumo);
-            // $subtotal = $reg_ins[0] * $tabla_cant[$i]; //multiplico precio x cant
-            // // $reg_producto = mysqli_fetch_array($result);
-            // $stock_actual = $reg_ins[1] + $tabla_cant[$i];
-            // mysqli_query($conexion, "UPDATE stock_insumos SET cantidad = '$stock_actual' WHERE id_insumo = '$tabla_id[$i]'");
+            $resultInsumo = mysqli_query($conexion,"SELECT cantidad FROM insumos WHERE id_insumo ='$tabla_id[$i]'"); //busco el precio del insumo
+            $reg_ins = mysqli_fetch_array($resultInsumo);
+
+            $stock_actual = $reg_ins['cantidad'] + $tabla_cant[$i];
+            mysqli_query($conexion, "UPDATE insumos SET cantidad = '$stock_actual' WHERE id_insumo = '$tabla_id[$i]'");
             //agregar a detalle factura
-            //existe info redundante respecto a la fecha, y total del importe total por productos ya que estos se encuentran en el encabezado
+
             mysqli_query($conexion, "INSERT INTO detallefactura (idFactura, id_producto, cantidad, preUnitario, bonificacion, preTotal)
              VALUES('$idFactura','$tabla_id[$i]','$tabla_cant[$i]',$tabla_preUni[$i],'$descuento','$tabla_preTotal[$i]')");
-            // or die("Problemas en el select4:".mysqli_error($conexion));
           };
         };
         echo $num_factura;
+      }else {
+        echo 0;
       }
       // if ($tabla_cant[0] > 0 ){
       //   $tipo = 1;
@@ -152,19 +143,15 @@
 // =================================================================guardar factura tipo venta productos ============================================
       case 'factura_venta_producto':
         $cont=0;
-        // $tabla_cant = $_POST['tabla_cant'];
-        // $tabla_id = $_POST['tabla_id'];
         $fecha = date_format(date_create($_POST['fecha']),'Y/m/d');
         // $ff= explode("/",$fecha);
-        $cliente = $_POST['cliente'];
+        $cliente = $_POST['cliente_proveedor'];
         $formapago = $_POST['formapago'];
         $tipo_factura = $_POST['tipofactura'];
         $descuento = $_POST['Descuento'];
-        // $tabla_id= explode(",",$tabla_id);  //el array tabla_id y tabla_cant me los envia separados por ',' los datos. hago el split
-        // $tabla_cant= explode(",",$tabla_cant);
-        $tipo = 1;//1-venta 2-compra
+        $tipoCompraVenta = $_POST['tipoCompraVenta'];//1-venta 2-compra
 
-        $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario FROM detalle_novedad WHERE ventaCompra ='$tipo'");
+        $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario FROM detalle_novedad WHERE ventaCompra ='$tipoCompraVenta'");
 
         while($fila = $query -> fetch_assoc()){ //busco todos el pedido que esta en detalle novedad
 
@@ -187,13 +174,13 @@
         }
         $total = $totalNeto + $iva;
         if ($tabla_cant[0] > 0 ){
-          $num_factura = ulti_factura($tipo, $tipo_factura);
+          $num_factura = ulti_factura($tipoCompraVenta, $tipo_factura);
 
           $total = $total - $descuento;
           //el descuento lo hice general y no por producto kbe el chori
           //por ahora agrego 0 al iva, y compro como cons final
           mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
-          VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$tipo')");//1-venta 2-compra
+          VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$tipoCompraVenta')");//1-venta 2-compra
 
           $idFactura = idFactura($tipo_factura,$num_factura);
 
@@ -218,13 +205,14 @@
           echo 0;
         };
         break;
+
 // =================================================================guardar factura tipo venta-compra NOVEDAD ============================================
         case 'facturaNovedad':
           $option = $_POST['option'];
           $tipoCompraVenta = $_POST['tipoCompraVenta'];
           if ($option == '1') {
             $array = array();
-            $cliente = $_POST['cliente'];
+            $cliente = $_POST['cliente_proveedor'];
             $formapago = $_POST['formapago'];
             $cant= $_POST['cant'];
             $idProducto=$_POST['idProducto'];
@@ -329,13 +317,13 @@
           };
 
             $salida ="";
-            $resultProducto = mysqli_query($conexion,"SELECT i.desc_insumo, r.* FROM recetas as r INNER JOIN insumos as i on r.id_insumo = i.id_insumo WHERE r.id_producto ='$idProducto'");
+            $resultProducto = mysqli_query($conexion,"SELECT i.descripcion, r.* FROM recetas as r INNER JOIN insumos as i on r.id_insumo = i.id_insumo WHERE r.id_producto ='$idProducto'");
 
            	while($fila = $resultProducto -> fetch_assoc()){
            		$salida.="
               <tr bgcolor='white'>
     					<td style='width:10%'>".$fila['id_insumo']."</td>
-    					<td style='width:50%'>".$fila['desc_insumo']."</td>
+    					<td style='width:50%'>".$fila['descripcion']."</td>
     					<td style='width:10%'>".$fila['cantidad']."</td>
     					<td style='width:10%'><input type='button'  value='Eliminar' class='btn btn-danger btn-sm' onclick='eliminarFila(".$fila['id_ingrediente'].");'/></td></tr>";
            	}

@@ -231,29 +231,7 @@ function extraer_dinero()
 //
 // }
 
-function factura_compra_insumo()
-{
-	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
-	console.log(tabla_cant);
-	if (statusConfirm == true){
-		var data_form = $("#formulario").serialize()
-		console.log(data_form)
-		$.ajax({
-			url:'../php/consultas.php',
-			type:'POST',
-			data: "Boton=factura_compra_insumo&"+data_form+'&tabla_cant='+tabla_cant+'&tabla_id='+tabla_id
-		}).done(function(resp){
-			if(resp > 0){
-				alert("ok");
-				location.href='compra_insumo.php';
-			}else {
-				if(resp == 0){
-					alert("debe rellenar los cambos");
-				};
-			};
-		});
-	};
-}
+
 
 
 
@@ -279,8 +257,8 @@ $('#tipo_factura').change(function(){
 	}
 });
 
-function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamica
-		id_tipo = tipo;
+function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamica//tipo = (1-venta 2-compra)
+
 		var id_prod = $('#id_prod').val();
 		var iva = $('#ivaC').val();
 		if (tipo == 1) {
@@ -303,6 +281,7 @@ function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamic
 				$('#productos').html(resp.tabla);
 				$('#totalneto').val(resp.totalneto);
 				$('#total').val(resp.total);
+				$('#iva').val(resp.iva);
 
 				$('#ivaC').val(resp.ivaC);
 				$('#totalnetoC').val(resp.totalnetoC);
@@ -326,23 +305,28 @@ function eliminarFila(nfila){
 		$('#totalneto').val(resp.totalneto);
 		$('#iva').val(resp.iva);
 		$('#total').val(resp.total);
+
 		$('#totalnetoC').val(resp.totalnetoC);
+		$('#totalC').val(resp.totalC);
 	});
 }
 
 
-function factura_venta_producto(){
+function factura_venta_producto(tipo){//tipo = (1-venta 2-compra)
 
 	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
 	console.log(tabla_cant);
+	console.log(tipo);
 	if (statusConfirm == true){
 		var data_form = $("#formulario").serialize()
 		console.log(data_form)
 		$.ajax({
 			url:'../php/consultas.php',
 			type:'POST',
-			data: 'Boton=factura_venta_producto&'+data_form,
+			data: 'Boton=factura_venta_producto&'+data_form+'&tipoCompraVenta='+tipo,
+			dataType: 'json',
 		}).done(function(resp){
+			console.log(resp);
 			if(resp > 0){
 				alert("ok");
 				location.href='nuevaVenta.php';
@@ -356,6 +340,53 @@ function factura_venta_producto(){
 	};
 }
 
+//================================funciones para factura compra==================
+
+function factura_compra_insumo(tipo){//tipo = (1-venta 2-compra)
+	// var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
+	// console.log(tabla_cant);
+	// if (statusConfirm == true){
+	// 	var data_form = $("#formulario").serialize()
+	// 	console.log(data_form)
+	// 	$.ajax({
+	// 		url:'../php/consultas.php',
+	// 		type:'POST',
+	// 		data: "Boton=factura_compra_insumo&"+data_form+'&tabla_cant='+tabla_cant+'&tabla_id='+tabla_id
+	// 	}).done(function(resp){
+	// 		if(resp > 0){
+	// 			alert("ok");
+	// 			location.href='compra_insumo.php';
+	// 		}else {
+	// 			if(resp == 0){
+	// 				alert("debe rellenar los cambos");
+	// 			};
+	// 		};
+	// 	});
+	// };
+
+	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
+	if (statusConfirm == true){
+		var data_form = $("#formulario").serialize()
+		console.log(data_form)
+		console.log(tipo);
+		$.ajax({
+			url:'../php/consultas.php',
+			type:'POST',
+			data: 'Boton=factura_compra_insumo&'+data_form+'&tipoCompraVenta='+tipo,
+			dataType: 'json',
+		}).done(function(resp){
+			console.log(resp);
+			if(resp > 0){
+				alert("ok");
+				location.href='compra_insumo.php';
+			}else {
+				if(resp == 0){
+					alert("debe rellenar los cambos");
+				};
+			};
+		});
+	};
+}
 
 
 

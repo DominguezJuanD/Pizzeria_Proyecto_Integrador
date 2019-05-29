@@ -1,3 +1,5 @@
+<!--  -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +10,6 @@
 <body>
 	<center>
 		<?php
-			include("Menu2.php");
 			$id = $_REQUEST['id'];
 			require("../php/conexion.php");
 			$query = "SELECT * FROM Proveedores WHERE id_proveedor ='$id'";

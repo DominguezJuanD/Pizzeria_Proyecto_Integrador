@@ -57,9 +57,11 @@
 									</td>
 
 									<td <b>Cantidad </b></td>
-									<td><input type="number"  class="outlinenone" id="Cantidad" value="0"></td>
+									<td><input type="number"  class="outlinenone" id="Cantidad" value="0"></input></td>
 
-									<td align="right"> <br> <input class="btn btn-primary" role="button" type="button" value="Agregar" onclick="agregar_insumos();" /></td>
+									<td align="right">  <input class="btn btn-primary" role="button" type="button" value="Agregar" onclick="agregar_insumos();" ></input></td>
+									<td>  </td>
+									<td align="right">  <button href='listarProductos.php' class='btn btn-danger'> Cacelar </button></td>
 								</tr>
 
 						</tr>
