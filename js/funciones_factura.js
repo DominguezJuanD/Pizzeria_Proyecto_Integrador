@@ -14,120 +14,120 @@ var  id_fila;
 var NumeroFactura;
 //__________________//
 
-function buscarCliente(){
-	for (var i = 0; i < $arrayClientesJS.length; i++) {
-		if((document.getElementById('idCliente').value) == ($arrayClientesJS[i][4])){
-			document.getElementById('nombCliente').value = $arrayClientesJS[i][1];
-			document.getElementById('domicCliente').value = $arrayClientesJS[i][3];
-			document.getElementById('telCliente').value = $arrayClientesJS[i][0];
-		}
-	}
-}
-
-function numeroFactura(){
-	var $fec = new Date();
-	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'A'){
-		document.getElementById('numFact').value = $numeroFacturaA;
-		document.getElementById('serieFact').value = "1";
-		document.getElementById('fechaFact').value = $fec.getDate() + "/" + ($fec.getMonth() +1) + "/" + $fec.getFullYear();
-	}
-	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'B'){
-		document.getElementById('numFact').value = $numeroFacturaB;
-		document.getElementById('serieFact').value = "1";
-		document.getElementById('fechaFact').value = $fec.getDate() + "/" + ($fec.getMonth() +1) + "/" + $fec.getFullYear();
-	}
-}
-
-function calcularIVA($total){
-	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'A'){
-		document.getElementById('SUBTOTAL').value = $total;
-		document.getElementById('IVA21').value = ($total *0.21);
-		document.getElementById('TOTAL').value = parseFloat($total) + ($total *0.21);
-	}
-	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'B'){
-		document.getElementById('SUBTOTAL').value = $total*1.21;
-		document.getElementById('IVA21').value = 0;
-		document.getElementById('TOTAL').value = parseFloat($total) + ($total *0.21);
-	}
-}
-
-function buscarDescripcion($producto,$num){
-	$encontro = 0
-	for (var i = 0; i < $arrayProductosJS.length; i++) {
-		if($producto == $arrayProductosJS[i][0]){
-			document.getElementById("DETPRO".concat($num)).value = $arrayProductosJS[i][1];
-			document.getElementById("PREPRO".concat($num)).value = $arrayProductosJS[i][2]
-			encontro = 1
-		}
-	}
-	if ($encontro = 0){
-		alert("Codigo no encontrado")
-		document.getElementById("CODPRO".concat($num)).value = ""
-	}
-}
-
-function calcularPrecio($num2){
-	document.getElementById('IMPPRO'.concat($num2)).value = (document.getElementById('CANPRO'.concat($num2)).value * document.getElementById('PREPRO'.concat($num2)).value) * (1-(document.getElementById('BONPRO'.concat($num2)).value/100));
-}
-
-function calcularTotal(){
-	$total = (document.getElementById('IMPPRO01').value*1) +
-			(document.getElementById('IMPPRO02').value*1) +
-			(document.getElementById('IMPPRO03').value*1) +
-			(document.getElementById('IMPPRO04').value*1) +
-			(document.getElementById('IMPPRO05').value*1) +
-			(document.getElementById('IMPPRO06').value*1) +
-			(document.getElementById('IMPPRO07').value*1) +
-			(document.getElementById('IMPPRO08').value*1) +
-			(document.getElementById('IMPPRO09').value*1) +
-			(document.getElementById('IMPPRO10').value*1);
-	calcularIVA($total);
-}
-
-function buscarIdProducto($Codigo,$Descrip,$precio){
-	for (var i = 0; i < $arrayProductosJS.length; i++) {
-		if((document.getElementById($Descrip).value).trim() == ($arrayProductosJS[i][1]).trim())
-		{
-			document.getElementById($Codigo).value = $arrayProductosJS[i][0]
-			document.getElementById($precio).value = $arrayProductosJS[i][2]
-		}
-	}
-}
-function buscarIdCliente($nombCliente){
-
-	for (var i = 0; i < $arrayClientesJS.length; i++) {
-		if((document.getElementById($nombCliente).value).trim() == ($arrayClientesJS[i][1]).trim())
-		{
-			document.getElementById('telCliente').value = $arrayClientesJS[i][0]
-			document.getElementById('idCliente').value = $arrayClientesJS[i][4]
-			document.getElementById('domicCliente').value = $arrayClientesJS[i][3]
-		}
-	}
-}
-
-function buscarStock($num){
-	$cantidad =	document.getElementById("CANPRO".concat($num)).value
-	$codigo   = document.getElementById("CODPRO".concat($num)).value
-	for (var i = 0; i < $stockProductos.length; i++) {
-		if($codigo == $stockProductos[i][0]){
-			if(($cantidad*1) > $stockProductos[i][1]) {
-				alert("Stock insuficiente. Quedan " + $stockProductos[i][1] + " unidades de este producto")
-				document.getElementById("CANPRO".concat($num)).value = ""
-				document.getElementById("IMPPRO".concat($num)).value = ""
-			}
-		}
-	}
-}
-
-function controlarVacio($num){
-	if (document.getElementById("CODPRO".concat($num)).value > 0){
-		calcularPrecio($num)
-		calcularTotal($num)
-		//buscarStock($num)
-	}else{
-		document.getElementById("CANPRO".concat($num)).value = 0
-	}
-}
+// function buscarCliente(){
+// 	for (var i = 0; i < $arrayClientesJS.length; i++) {
+// 		if((document.getElementById('idCliente').value) == ($arrayClientesJS[i][4])){
+// 			document.getElementById('nombCliente').value = $arrayClientesJS[i][1];
+// 			document.getElementById('domicCliente').value = $arrayClientesJS[i][3];
+// 			document.getElementById('telCliente').value = $arrayClientesJS[i][0];
+// 		}
+// 	}
+// }
+//
+// function numeroFactura(){
+// 	var $fec = new Date();
+// 	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'A'){
+// 		document.getElementById('numFact').value = $numeroFacturaA;
+// 		document.getElementById('serieFact').value = "1";
+// 		document.getElementById('fechaFact').value = $fec.getDate() + "/" + ($fec.getMonth() +1) + "/" + $fec.getFullYear();
+// 	}
+// 	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'B'){
+// 		document.getElementById('numFact').value = $numeroFacturaB;
+// 		document.getElementById('serieFact').value = "1";
+// 		document.getElementById('fechaFact').value = $fec.getDate() + "/" + ($fec.getMonth() +1) + "/" + $fec.getFullYear();
+// 	}
+// }
+//
+// function calcularIVA($total){
+// 	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'A'){
+// 		document.getElementById('SUBTOTAL').value = $total;
+// 		document.getElementById('IVA21').value = ($total *0.21);
+// 		document.getElementById('TOTAL').value = parseFloat($total) + ($total *0.21);
+// 	}
+// 	if (document.getElementById('TIPOFACT').value.toUpperCase() == 'B'){
+// 		document.getElementById('SUBTOTAL').value = $total*1.21;
+// 		document.getElementById('IVA21').value = 0;
+// 		document.getElementById('TOTAL').value = parseFloat($total) + ($total *0.21);
+// 	}
+// }
+//
+// function buscarDescripcion($producto,$num){
+// 	$encontro = 0
+// 	for (var i = 0; i < $arrayProductosJS.length; i++) {
+// 		if($producto == $arrayProductosJS[i][0]){
+// 			document.getElementById("DETPRO".concat($num)).value = $arrayProductosJS[i][1];
+// 			document.getElementById("PREPRO".concat($num)).value = $arrayProductosJS[i][2]
+// 			encontro = 1
+// 		}
+// 	}
+// 	if ($encontro = 0){
+// 		alert("Codigo no encontrado")
+// 		document.getElementById("CODPRO".concat($num)).value = ""
+// 	}
+// }
+//
+// function calcularPrecio($num2){
+// 	document.getElementById('IMPPRO'.concat($num2)).value = (document.getElementById('CANPRO'.concat($num2)).value * document.getElementById('PREPRO'.concat($num2)).value) * (1-(document.getElementById('BONPRO'.concat($num2)).value/100));
+// }
+//
+// function calcularTotal(){
+// 	$total = (document.getElementById('IMPPRO01').value*1) +
+// 			(document.getElementById('IMPPRO02').value*1) +
+// 			(document.getElementById('IMPPRO03').value*1) +
+// 			(document.getElementById('IMPPRO04').value*1) +
+// 			(document.getElementById('IMPPRO05').value*1) +
+// 			(document.getElementById('IMPPRO06').value*1) +
+// 			(document.getElementById('IMPPRO07').value*1) +
+// 			(document.getElementById('IMPPRO08').value*1) +
+// 			(document.getElementById('IMPPRO09').value*1) +
+// 			(document.getElementById('IMPPRO10').value*1);
+// 	calcularIVA($total);
+// }
+//
+// function buscarIdProducto($Codigo,$Descrip,$precio){
+// 	for (var i = 0; i < $arrayProductosJS.length; i++) {
+// 		if((document.getElementById($Descrip).value).trim() == ($arrayProductosJS[i][1]).trim())
+// 		{
+// 			document.getElementById($Codigo).value = $arrayProductosJS[i][0]
+// 			document.getElementById($precio).value = $arrayProductosJS[i][2]
+// 		}
+// 	}
+// }
+// function buscarIdCliente($nombCliente){
+//
+// 	for (var i = 0; i < $arrayClientesJS.length; i++) {
+// 		if((document.getElementById($nombCliente).value).trim() == ($arrayClientesJS[i][1]).trim())
+// 		{
+// 			document.getElementById('telCliente').value = $arrayClientesJS[i][0]
+// 			document.getElementById('idCliente').value = $arrayClientesJS[i][4]
+// 			document.getElementById('domicCliente').value = $arrayClientesJS[i][3]
+// 		}
+// 	}
+// }
+//
+// function buscarStock($num){
+// 	$cantidad =	document.getElementById("CANPRO".concat($num)).value
+// 	$codigo   = document.getElementById("CODPRO".concat($num)).value
+// 	for (var i = 0; i < $stockProductos.length; i++) {
+// 		if($codigo == $stockProductos[i][0]){
+// 			if(($cantidad*1) > $stockProductos[i][1]) {
+// 				alert("Stock insuficiente. Quedan " + $stockProductos[i][1] + " unidades de este producto")
+// 				document.getElementById("CANPRO".concat($num)).value = ""
+// 				document.getElementById("IMPPRO".concat($num)).value = ""
+// 			}
+// 		}
+// 	}
+// }
+//
+// function controlarVacio($num){
+// 	if (document.getElementById("CODPRO".concat($num)).value > 0){
+// 		calcularPrecio($num)
+// 		calcularTotal($num)
+// 		//buscarStock($num)
+// 	}else{
+// 		document.getElementById("CANPRO".concat($num)).value = 0
+// 	}
+// }
 
 function limpiar()
 {
@@ -258,7 +258,7 @@ $('#tipo_factura').change(function(){
 });
 
 function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamica//tipo = (1-venta 2-compra)
-
+		id_tipo = tipo;
 		var id_prod = $('#id_prod').val();
 		var iva = $('#ivaC').val();
 		if (tipo == 1) {
