@@ -54,7 +54,7 @@
 
               <ul>
 
-                <a href="#" id="mostrar-compras"> Nueva compra </a>
+                <a href="buscarFacturas.php" id="mostrar-compras"> Num. Factura </a>
 
               </ul>
 

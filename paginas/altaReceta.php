@@ -61,7 +61,7 @@
 
 									<td align="right">  <input class="btn btn-primary" role="button" type="button" value="Agregar" onclick="agregar_insumos();" ></input></td>
 									<td>  </td>
-									<td align="right">  <button href='listarProductos.php' class='btn btn-danger'> Cacelar </button></td>
+									<td align="right">  <a href='listarProductos.php' class='btn btn-danger' role="button" type="button"> Cacelar </a></td>
 								</tr>
 
 						</tr>

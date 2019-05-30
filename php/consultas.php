@@ -4,18 +4,29 @@
 
   switch($boton){
 
-    case 'buscar_factura':
-      $num = $_POST['Num_Factura'];
-      $tipo_factura = $_POST['Tipo_Factura'];
-      $num_serie = $_POST['Num_Serie'];
-      $result = mysqli_query($conexion,"SELECT ef.*, df.*, cl.*, pr.*  FROM encabezadoFactura ef INNER JOIN detalleFactura df INNER JOIN clientes cl INNER JOIN productos pr
-        WHERE  ef.numComprob = '$num' AND  ef.serieComprob = '$num_serie' AND ef.tipComprob = '$tipo_factura'
-        AND  df.numComprob = '$num' AND df.serieComprob = '$num_serie' AND ef.idCliente = cl.idCliente AND df.id_producto = pr.id_producto;") or
-         die("Problemas en el select:".mysqli_error($conexion));
-        while( $reg = mysqli_fetch_assoc($result)){
-            $data[] = $reg;
+    case 'buscarFacturas':
+      $numFactura = $_POST['numFactura'];
+      $puntoVenta = $_POST['puntoVenta'];
+      $tipo_factura = $_POST['tipofactura'];
+      $tipoComp = $_POST['tipoComp'];
+      $tabla = array();
+      $result = mysqli_query($conexion,"SELECT *  FROM encabezadofactura
+                                        WHERE tipComprob = '$tipoComp' and puntoVenta = '$puntoVenta' and numComprob = '$numFactura' and tipoCompraVenta = '$tipo_factura' ");
+
+        while( $fila = $result -> fetch_assoc()){
+          $salida.="
+          <tr bgcolor='white'>
+          <td style='width:10%'>".$fila['tipComprob']."</td>
+          <td style='width:50%'>".zero_fill($fila['puntoVenta'],4)."-".zero_fill($fila['numComprob'],8)."</td>
+          <td style='width:10%'>".$fila['usuario_carga']."</td>
+          <td style='width:10%'>".date_format(date_create($fila['fechaComprob']),'d/m/Y')."</td>
+          <td style='width:10%'>".$fila['total']."</td>
+          <td style='width:10%'><input type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' onclick='eliminarFila(".$fila['numFila'].");'/></td></tr>";
           }
-          echo json_encode($data);
+
+          $tabla['tabla'] = $salida;
+
+          echo json_encode($tabla);
       break;
 
     case 'ingreso_dinero':
@@ -265,10 +276,10 @@
 // =================================================================guardar Retas ============================================
         case 'altaRecetas':
           $option = $_POST['option'];
+          $idProducto=$_POST['idProducto'];
 
           if ($option == '1') {
             $cant= $_POST['cant'];
-            $idProducto=$_POST['idProducto'];
             $idInsumo = $_POST['id_insumo'];
             if ($cant > 0 ){
               $query = mysqli_query($conexion, "SELECT max(id_ingrediente) FROM recetas WHERE id_producto = '$idProducto'");
@@ -355,7 +366,9 @@
      return $idFactura;
    }
 
-
+   function zero_fill($valor, $long = 0){
+    return str_pad($valor, $long, '0', STR_PAD_LEFT);
+  }
 
 
 

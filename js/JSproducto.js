@@ -87,7 +87,7 @@ function eliminarFila(nfila){
 	$.ajax({
 		url:'../php/consultas.php',
 		type:'POST',
-		data: 'Boton=altaRecetas&nfila='+nfila+'&option=0',
+		data: 'Boton=altaRecetas&nfila='+nfila+'&option=0&idProducto='+idProduc,
 		dataType: 'json',
 	}).done(function(resp){
 		$('#insumos').html(resp.tabla);

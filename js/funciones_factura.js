@@ -174,63 +174,28 @@ function extraer_dinero()
 		alert("ingreso es cero");
 	}
 }
-//_______________________INSUMO_____________________________
 
-//agrego productos a la tabla dinamica
-// function agregar_insumo()
-// {
-// 		var id_prod = $('#id_prod').val();
-//
-// 		var Cantidad = $('#Cantidad').val();
-// 		tabla_id[tabla_id.length] = id_prod;
-// 		tabla_cant[tabla_cant.length] = Cantidad;
-// 		if (id_prod>0 && Cantidad>0){
-// 			$.ajax({
-// 				url:'php/consultas.php',
-// 				type:'POST',
-// 				data: 'Cantidad='+Cantidad+'&id_prod='+id_prod+'&Boton=agregar_insumo'
-// 			}).done(function(resp){
-// 					var listado = "";
-// 					data = eval(resp);
-// 					var id_fila = "name"+num;
-// 					listado += '<tr id="'+id_fila+'" bgcolor="white">'
-// 					listado += '<td  name=$'+num+'  style="width:30%">'+data[0]["id_insumo"]+'</td>'
-// 					listado += '<td  style="width:50%">'+data[0]["desc_insumo"]+'</td>'
-// 					listado += '<td  name=$'+num+' style="width:10%">'+Cantidad+'</td>'
-// 					listado += '<td style="width:10%"><input type="button" value="Eliminar" onclick="$('+id_fila+').remove();borrar('+num+');" /></td>'
-// 					listado += '</tr>'
-// 					$('#productos').append(listado);
-// 					num +=1;
-// 			});
-// 		}else {
-// 			alert("Ingrese un insumo o valor");
-// 		}
-//
-// }
-//================================funciones para factura compra==================
-// function agregar_insumo(){
-// 		var id_prod = $('#id_prod').val();
-// 		var des_pro = $('#id_prod option:selected').text();
-// 		var Cantidad = $('#Cantidad').val();
-// 		tabla_id[tabla_id.length] = id_prod;
-// 		tabla_cant[tabla_cant.length] = Cantidad;
-// 		if (id_prod>0 && Cantidad>0){
-// 					var listado = "";
-// 					var id_fila = "name"+num;
-// 					listado += '<tr id="'+id_fila+'" bgcolor="white">'
-// 					listado += '<td  name=$'+num+'  style="width:30%">'+id_prod+'</td>'
-// 					listado += '<td  style="width:50%">'+des_pro+'</td>'
-// 					listado += '<td  name=$'+num+' style="width:10%">'+Cantidad+'</td>'
-// 					listado += '<td style="width:10%"><input type="button" value="Eliminar" onclick="$('+id_fila+').remove();" /></td>'
-// 					listado += '</tr>'
-// 					$('#productos').append(listado);
-// 					num +=1;
-// 		}else {
-// 			alert("Ingrese un insumo o valor");
-// 		}
-//
-// }
+//=================================================== Busqueda de factura ==================================================================================
 
+function buscarFacturas(){
+	var formBusqueda = $('#formBusqueda').serialize();
+
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=buscarFacturas&'+formBusqueda,
+		dataType: 'json',
+	}).done(function(resp){
+		console.log(resp.tabla);
+		$('#listas').html(resp.tabla);
+		// $('#totalneto').val(resp.totalneto);
+		// $('#iva').val(resp.iva);
+		// $('#total').val(resp.total);
+		//
+		// $('#totalnetoC').val(resp.totalnetoC);
+		// $('#totalC').val(resp.totalC);
+	});
+}
 
 
 
