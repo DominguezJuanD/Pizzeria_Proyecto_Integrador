@@ -122,6 +122,22 @@ ul, ol{
 	color: #091895;
 }
 
+/* css para factura de ventaa */
+.atendio {
+  float: right;
+}
+
+.fecha{
+  float: left;
+}
+
+.tipoFactura{
+  text-align: center;
+}
+
+
+
+
 /* css de las paginas para modificar los datos  */
 
 #submit {
