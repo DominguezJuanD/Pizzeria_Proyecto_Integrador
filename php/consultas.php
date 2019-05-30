@@ -18,15 +18,6 @@
           echo json_encode($data);
       break;
 
-    case 'cargar_insumo':
-      $descripcion = $_POST['descripcion'];
-      $precio_compra = $_POST['precio_compra'];
-      $udm = $_POST['udm'];
-      mysqli_query($conexion, "INSERT INTO insumos(desc_insumo, udm, precio_compra) VALUES('$descripcion','$udm','$precio_compra');")  or
-       die("Problemas en:".mysqli_error($conexion));
-      echo "ok";
-      break;
-
     case 'ingreso_dinero':
       $fecha = $_POST['fecha'];
       $ff= explode("/",$fecha);
@@ -105,40 +96,7 @@
       }else {
         echo 0;
       }
-      // if ($tabla_cant[0] > 0 ){
-      //   $tipo = 1;
-      //   $num_factura = ulti_factura($tipo);
-      //   //recorro todos los id para hacer el subtotal
-      //   for ($i=0; $i < sizeof($tabla_id); $i++) {
-      //     $resultInsumo = mysqli_query($conexion,"SELECT precio_compra FROM insumos WHERE id_insumo ='$tabla_id[$i]'"); //busco el precio del insumo
-      //     $reg_ins = mysqli_fetch_array($resultInsumo);
-      //     $subtotal += $reg_ins[0] * $tabla_cant[$i]; //multiplico el precio del insumo ($reg_ins[0]) por la cantidad
-      //   }
-      //   $total = $subtotal - $descuento;
-      //   //el descuento lo hice general y no por producto kbe el chori
-      //   //por ahora agrego 0 al iva, y compro como cons final
-      //   mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
-      //   VALUES('$tipo_factura','1','$num_factura','$fecha','$prove','$formapago','$subtotal','0','$total','$tipo')");
-      //   for ($i=0; $i < sizeof($tabla_id); $i++) {
-      //     if ($tabla_id[$i] > 0){
-      //       $resultInsumo = mysqli_query($conexion,"SELECT i.precio_compra, si.cantidad FROM stock_insumos as si
-      //         INNER JOIN insumos as i on si.id_insumo = i.id_insumo and i.id_insumo ='$tabla_id[$i]'"); //busco el precio del insumo
-      //       $reg_ins = mysqli_fetch_array($resultInsumo);
-      //       $subtotal = $reg_ins[0] * $tabla_cant[$i]; //multiplico precio x cant
-      //       // $reg_producto = mysqli_fetch_array($result);
-      //       $stock_actual = $reg_ins[1] + $tabla_cant[$i];
-      //       mysqli_query($conexion, "UPDATE stock_insumos SET cantidad = '$stock_actual' WHERE id_insumo = '$tabla_id[$i]'");
-      //       //agregar a detalle factura
-      //       //existe info redundante respecto a la fecha, y total del importe total por productos ya que estos se encuentran en el encabezado
-      //       mysqli_query($conexion, "INSERT INTO detallefactura (numComprob, fechaComprob, puntoVenta, id_producto, cantidad, precio, bonificacion, importeProducto, tipoCompraVenta)
-      //        VALUES('$num_factura','$fecha','1','$tabla_id[$i]','$tabla_cant[$i]',$reg_ins[0],'$descuento','$subtotal','2')");
-      //       // or die("Problemas en el select4:".mysqli_error($conexion));
-      //     };
-      //   };
-      //   echo $num_factura;
-      // }else {
-      //   echo 0;
-      // };
+
       break;
 // =================================================================guardar factura tipo venta productos ============================================
       case 'factura_venta_producto':
@@ -186,13 +144,22 @@
 
           for ($i=0; $i < sizeof($tabla_id); $i++) {
             if ($tabla_id[$i] > 0){
-              // $resultInsumo = mysqli_query($conexion,"SELECT i.precio_compra, si.cantidad FROM stock_insumos as si
-              //   INNER JOIN insumos as i on si.id_insumo = i.id_insumo and i.id_insumo ='$tabla_id[$i]'"); //busco el precio del insumo
-              // $reg_ins = mysqli_fetch_array($resultInsumo);
-              // $subtotal = $reg_ins[0] * $tabla_cant[$i]; //multiplico precio x cant
-              // // $reg_producto = mysqli_fetch_array($result);
-              // $stock_actual = $reg_ins[1] + $tabla_cant[$i];
-              // mysqli_query($conexion, "UPDATE stock_insumos SET cantidad = '$stock_actual' WHERE id_insumo = '$tabla_id[$i]'");
+              $contRes = 0;
+              $insumoReceta = mysqli_query($conexion,"SELECT r.id_insumo, r.cantidad as cantidadRes, i.cantidad as cantidadIns
+                                                      FROM recetas  as r inner join insumos as i on r.id_insumo = i.id_insumo
+                                                      where r.id_producto  ='$tabla_id[$i]'"); //busco el precio del insumo
+
+              while($reg_res = $insumoReceta -> fetch_assoc()){
+
+                $cantTotal = $reg_res['cantidadRes'] * $tabla_cant[$i]; //multiplico cantidad de insumo de la receta x cantidad de productos comprados
+                $cantResta[sizeof($cantResta)] =  $reg_res['cantidadIns'] - $cantTotal; //resto del stock de insumos la catidad que usa los productos que se vendieron
+                $arrayId_insumo[sizeof($arrayId_insumo)] = $reg_res['id_insumo'];
+              }
+
+              for ($i=0; $i < sizeof($cantResta); $i++) {
+                mysqli_query($conexion, "UPDATE insumos SET cantidad = '$cantResta[$i]' WHERE id_insumo = '$arrayId_insumo[$i]'");
+              }
+
               //agregar a detalle factura
               //existe info redundante respecto a la fecha, y total del importe total por productos ya que estos se encuentran en el encabezado
               mysqli_query($conexion, "INSERT INTO detallefactura (idFactura, id_producto, cantidad, preUnitario, bonificacion, preTotal)

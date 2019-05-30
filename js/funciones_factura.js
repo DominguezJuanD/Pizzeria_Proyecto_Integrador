@@ -343,26 +343,6 @@ function factura_venta_producto(tipo){//tipo = (1-venta 2-compra)
 //================================funciones para factura compra==================
 
 function factura_compra_insumo(tipo){//tipo = (1-venta 2-compra)
-	// var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
-	// console.log(tabla_cant);
-	// if (statusConfirm == true){
-	// 	var data_form = $("#formulario").serialize()
-	// 	console.log(data_form)
-	// 	$.ajax({
-	// 		url:'../php/consultas.php',
-	// 		type:'POST',
-	// 		data: "Boton=factura_compra_insumo&"+data_form+'&tabla_cant='+tabla_cant+'&tabla_id='+tabla_id
-	// 	}).done(function(resp){
-	// 		if(resp > 0){
-	// 			alert("ok");
-	// 			location.href='compra_insumo.php';
-	// 		}else {
-	// 			if(resp == 0){
-	// 				alert("debe rellenar los cambos");
-	// 			};
-	// 		};
-	// 	});
-	// };
 
 	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
 	if (statusConfirm == true){
