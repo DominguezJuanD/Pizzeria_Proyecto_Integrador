@@ -55,6 +55,7 @@
               <ul>
 
                 <a href="buscarFacturas.php" id="mostrar-compras"> Num. Factura </a>
+                <a href="buscarFacturas.php" id="mostrar-compras"> Fac. Desde-Hasta </a>
 
               </ul>
 

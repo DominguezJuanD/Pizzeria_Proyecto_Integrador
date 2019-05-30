@@ -16,7 +16,7 @@
         while( $fila = $result -> fetch_assoc()){
           $salida.="
           <tr bgcolor='white'>
-          <td style='width:10%'>".$fila['tipComprob']."</td>
+          <td style='width:10%'> Fc".$fila['tipComprob']."</td>
           <td style='width:50%'>".zero_fill($fila['puntoVenta'],4)."-".zero_fill($fila['numComprob'],8)."</td>
           <td style='width:10%'>".$fila['usuario_carga']."</td>
           <td style='width:10%'>".date_format(date_create($fila['fechaComprob']),'d/m/Y')."</td>

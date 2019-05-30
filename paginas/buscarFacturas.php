@@ -43,7 +43,7 @@
             <input type="number" name="puntoVenta" value="1"></input>
             <input type="number" name="numFactura" value="0"></input>
 
-            <input class="btn btn-primary" role="button" type="button" value="Buscar" onclick="buscarFacturas();" />
+            <input class="btn btn-primary" role="button" type="button" value="Buscar Factura" onclick="buscarFacturas();" />
 
           <br>
 
