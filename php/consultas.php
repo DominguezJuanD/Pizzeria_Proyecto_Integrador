@@ -21,7 +21,7 @@
           <td style='width:10%'>".$fila['usuario_carga']."</td>
           <td style='width:10%'>".date_format(date_create($fila['fechaComprob']),'d/m/Y')."</td>
           <td style='width:10%'>".$fila['total']."</td>
-          <td style='width:10%'><input type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' onclick='eliminarFila(".$fila['numFila'].");'/></td></tr>";
+          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."'></a></td></tr>";
           }
 
           $tabla['tabla'] = $salida;
@@ -29,25 +29,58 @@
           echo json_encode($tabla);
       break;
 
-    case 'ingreso_dinero':
-      $fecha = $_POST['fecha'];
-      $ff= explode("/",$fecha);
-      $dinero = $_POST['dinero'];
-      $observacion = $_POST['observacion'];
-      mysqli_query($conexion, "INSERT INTO IEDinero(numMov, importe, tipo, concepto, fecha) VALUES(NULL,'$dinero','1','$observacion','".$ff[0]."-".$ff[1]."-".$ff[2]."');")  or
-       die("Problemas en:".mysqli_error($conexion));
-      echo "ok";
+      case 'detalleFactura':
+        // $tabla = array();
+        $id=$_POST['id'];
+
+        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y') as fecha, ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono FROM encabezadofactura as ef INNER join persona as p on p.id_persona = ef.idCliente WHERE ef.idFactura = '$id' ");
+                                        // SELECT ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono FROM encabezadofactura as ef INNER join persona as p on p.id_persona = ef.idCliente WHERE ef.idFactura = 56
+                                        // SELECT df.*, p.descripcion FROM detallefactura as df INNER join productos as p on p.id_producto = df.id_producto WHERE df.idFactura = 56
+        while( $fila1 = $query -> fetch_assoc()){
+              $tabla=$fila1;
+          }
+
+        $query2 = mysqli_query($conexion,"SELECT df.*, p.descripcion FROM detallefactura as df INNER join productos as p on p.id_producto = df.id_producto WHERE df.idFactura = '$id' ");
+        while( $fila = $query2 -> fetch_assoc()){
+          // $tabla=$fila;
+          $salida.="
+          <tr bgcolor='white'>
+          <td style='width:10%'>".$fila['id_producto']."</td>
+          <td style='width:50%'>".$fila['descripcion']."</td>
+          <td style='width:10%'>".$fila['cantidad']."</td>
+          <td style='width:10%'>".$fila['preUnitario']."</td>
+          <td style='width:10%'>".$fila['preTotal']."</td>
+          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."'></a></td></tr>";
+
+          }
+          // $tabla['enca'] = $tabla3;
+
+          $tabla['tabla'] = $salida;
+
+          echo json_encode($tabla);
+
+
       break;
 
-    case 'egreso_dinero':
-      $fecha = $_POST['fecha'];
-      $ff= explode("/",$fecha);
-      $dinero = $_POST['dinero'];
-      $observacion = $_POST['observacion'];
-      mysqli_query($conexion, "INSERT INTO IEDinero(numMov, importe, tipo, concepto, fecha) VALUES(NULL,'$dinero','2','$observacion','".$ff[0]."-".$ff[1]."-".$ff[2]."');")  or
-       die("Problemas en:".mysqli_error($conexion));
-      echo "ok";
-      break;
+    // case 'ingreso_dinero':
+    //   $fecha = $_POST['fecha'];
+    //   $ff= explode("/",$fecha);
+    //   $dinero = $_POST['dinero'];
+    //   $observacion = $_POST['observacion'];
+    //   mysqli_query($conexion, "INSERT INTO IEDinero(numMov, importe, tipo, concepto, fecha) VALUES(NULL,'$dinero','1','$observacion','".$ff[0]."-".$ff[1]."-".$ff[2]."');")  or
+    //    die("Problemas en:".mysqli_error($conexion));
+    //   echo "ok";
+    //   break;
+    //
+    // case 'egreso_dinero':
+    //   $fecha = $_POST['fecha'];
+    //   $ff= explode("/",$fecha);
+    //   $dinero = $_POST['dinero'];
+    //   $observacion = $_POST['observacion'];
+    //   mysqli_query($conexion, "INSERT INTO IEDinero(numMov, importe, tipo, concepto, fecha) VALUES(NULL,'$dinero','2','$observacion','".$ff[0]."-".$ff[1]."-".$ff[2]."');")  or
+    //    die("Problemas en:".mysqli_error($conexion));
+    //   echo "ok";
+    //   break;
 
 
 // ========================================guardar factura tipo compra insumo ======================================================

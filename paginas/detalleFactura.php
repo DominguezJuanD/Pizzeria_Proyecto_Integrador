@@ -8,6 +8,8 @@
 
 	include("../php/conexion.php");
 	include("Menu2.php");
+	$id = $_GET['id'];
+	
 ?>
 <html>
   <head>
@@ -16,7 +18,9 @@
       <meta charset="UTF8">
 			<link rel="stylesheet"  href="../css/Menu2.css">
   </head>
-<body>
+
+	<body onload="detalleFactura(<? echo $id ?>);">
+
   <section id="venta">
   	<div style="margin-left: 10%; margin-right:10%">
 

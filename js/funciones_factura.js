@@ -74,10 +74,34 @@ function buscarFacturas(){
 		data: 'Boton=buscarFacturas&'+formBusqueda,
 		dataType: 'json',
 	}).done(function(resp){
-		console.log(resp.tabla);
+		// console.log(resp.puntoVenta);
 		$('#listas').html(resp.tabla);
 		// $('#totalneto').val(resp.totalneto);
 		// $('#iva').val(resp.iva);
+		// $('#total').val(resp.total);
+		//
+		// $('#totalnetoC').val(resp.totalnetoC);
+		// $('#totalC').val(resp.totalC);
+	});
+}
+
+function detalleFactura(id){
+ console.log(id);
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=detalleFactura&id='+id,
+		dataType: 'json',
+	}).done(function(resp){
+
+		// console.log(resp.cosas);
+
+		$('#productos').html(resp.tabla);
+		// var datos = eval(resp);
+		console.log(resp.idFactura);
+		$('#fecha').val(resp.fecha);
+		// $('#totalneto').val(resp.totalneto);
+		$('#cliente').val(resp.nombre);
 		// $('#total').val(resp.total);
 		//
 		// $('#totalnetoC').val(resp.totalnetoC);
