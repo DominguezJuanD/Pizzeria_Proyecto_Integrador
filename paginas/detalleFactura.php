@@ -9,7 +9,7 @@
 	include("../php/conexion.php");
 	include("Menu2.php");
 	$id = $_GET['id'];
-	
+	$tipo = $_GET['tipo'];
 ?>
 <html>
   <head>
@@ -19,7 +19,7 @@
 			<link rel="stylesheet"  href="../css/Menu2.css">
   </head>
 
-	<body onload="detalleFactura(<? echo $id ?>);">
+	<body onload="detalleFactura(<? echo $id ?>,<? echo $tipo ?>);">
 
   <section id="venta">
   	<div style="margin-left: 10%; margin-right:10%">
@@ -30,7 +30,7 @@
   						<h3 align="center" >Factura</h3>
   						<form id="formulario">
 										<div class="fecha">
-											<b>Fecha:</b>
+											<b>Fecha/Hora:</b>
 	  									<input id="fecha" readonly="readonly"/>
 										</div>
 

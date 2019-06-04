@@ -59,7 +59,7 @@
                   <td style="width:50%">Nro. Comprobante</td>
 
                   <td style="width:10%"> Facturador </td>
-                  <td style="width:10%"> Fecha </td>
+                  <td style="width:10%"> Fecha/Hora </td>
                   <td style="width:10%"> Total $ </td>
 
                   <td style="width:10%">________ </td>

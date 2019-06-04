@@ -9,19 +9,21 @@
       $puntoVenta = $_POST['puntoVenta'];
       $tipo_factura = $_POST['tipofactura'];
       $tipoComp = $_POST['tipoComp'];
+
       $tabla = array();
-      $result = mysqli_query($conexion,"SELECT *  FROM encabezadofactura
-                                        WHERE tipComprob = '$tipoComp' and puntoVenta = '$puntoVenta' and numComprob = '$numFactura' and tipoCompraVenta = '$tipo_factura' ");
+      $result = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
+                                        FROM encabezadofactura as ef
+                                        WHERE ef.tipComprob = '$tipoComp' and ef.puntoVenta = '$puntoVenta' and ef.numComprob = '$numFactura' and ef.tipoCompraVenta = '$tipo_factura' ");
 
         while( $fila = $result -> fetch_assoc()){
           $salida.="
           <tr bgcolor='white'>
-          <td style='width:10%'> Fc".$fila['tipComprob']."</td>
-          <td style='width:50%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+          <td style='width:10%'> Fc: ".$fila['tipComprob']."</td>
+          <td style='width:40%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
           <td style='width:10%'>".$fila['usuario_carga']."</td>
-          <td style='width:10%'>".date_format(date_create($fila['fechaComprob']),'d/m/Y')."</td>
+          <td style='width:20%'>".$fila['fecha']."</td>
           <td style='width:10%'>".$fila['total']."</td>
-          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."'></a></td></tr>";
+          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=".$tipo_factura."'>Detalle</a></td></tr>";
           }
 
           $tabla['tabla'] = $salida;
@@ -32,15 +34,30 @@
       case 'detalleFactura':
         // $tabla = array();
         $id=$_POST['id'];
+        $tipo = $_POST['tipo'];
+        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y') as fecha, ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono
+                                        FROM encabezadofactura as ef
+                                        INNER join persona as p on p.id_persona = ef.idCliente
+                                        WHERE ef.idFactura = '$id' ");
 
-        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y') as fecha, ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono FROM encabezadofactura as ef INNER join persona as p on p.id_persona = ef.idCliente WHERE ef.idFactura = '$id' ");
-                                        // SELECT ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono FROM encabezadofactura as ef INNER join persona as p on p.id_persona = ef.idCliente WHERE ef.idFactura = 56
-                                        // SELECT df.*, p.descripcion FROM detallefactura as df INNER join productos as p on p.id_producto = df.id_producto WHERE df.idFactura = 56
         while( $fila1 = $query -> fetch_assoc()){
               $tabla=$fila1;
           }
 
-        $query2 = mysqli_query($conexion,"SELECT df.*, p.descripcion FROM detallefactura as df INNER join productos as p on p.id_producto = df.id_producto WHERE df.idFactura = '$id' ");
+
+          if ($tipo == 1) {
+            $query2 = mysqli_query($conexion,"SELECT df.*, p.descripcion
+                                              FROM detallefactura as df
+                                              INNER join productos as p on p.id_producto = df.id_producto
+                                              WHERE df.idFactura = '$id' ");
+          }else{
+            $query2 = mysqli_query($conexion,"SELECT df.*, i.descripcion
+                                              FROM detallefactura as df
+                                              INNER join insumos as i on i.id_insumo = df.id_producto
+                                              WHERE df.idFactura = '$id' ");
+          }
+
+
         while( $fila = $query2 -> fetch_assoc()){
           // $tabla=$fila;
           $salida.="
@@ -95,7 +112,9 @@
       $tipoCompraVenta = $_POST['tipoCompraVenta'];//1-venta 2-compra
       $cont=0;
 
-      $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario, iva FROM detalle_novedad WHERE ventaCompra ='$tipoCompraVenta'");//traigo todo la tabla detalle factura para la carga final
+      $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario, iva
+                                        FROM detalle_novedad
+                                        WHERE ventaCompra ='$tipoCompraVenta'");//traigo todo la tabla detalle factura para la carga final
 
       while($fila = $query -> fetch_assoc()){ //busco todos el pedido que esta en detalle novedad
 
@@ -121,7 +140,7 @@
         mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
         VALUES('$tipo_factura','1','$num_factura','$fecha','$prove','$formapago','$totalNetoC','$iva','$totalC','$tipoCompraVenta')");//1-venta 2-compra
 
-        $idFactura = idFactura($tipo_factura,$num_factura);
+        $idFactura = idFactura($tipo_factura,$num_factura, $tipoCompraVenta);
 
         for ($i=0; $i < sizeof($tabla_id); $i++) {
           if ($tabla_id[$i] > 0){
@@ -145,7 +164,7 @@
 // =================================================================guardar factura tipo venta productos ============================================
       case 'factura_venta_producto':
         $cont=0;
-        $fecha = date_format(date_create($_POST['fecha']),'Y/m/d');
+        $fecha = date('Y/m/d H:i:s',time());
         // $ff= explode("/",$fecha);
         $cliente = $_POST['cliente_proveedor'];
         $formapago = $_POST['formapago'];
@@ -157,8 +176,8 @@
 
         while($fila = $query -> fetch_assoc()){ //busco todos el pedido que esta en detalle novedad
 
-          $tabla_cant[$cont] = $fila['cantidad'];
-          $tabla_id[$cont] = $fila['idProducto'];
+          $tabla_cant[sizeof($tabla_cant)] = $fila['cantidad'];
+          $tabla_id[sizeof($tabla_id)] = $fila['idProducto'];
           if ($tipo_factura == 'A') {// hago el calculo si es que es fatura A o factura B
             $preTotal = round($fila['preUnitario'] * $fila['cantidad'], 3);
             $totalNeto+=$preTotal;
@@ -170,8 +189,8 @@
             $totalNeto+=$preTotal;
 
           }
-          $tabla_preUni[$cont] = $fila['preUnitario'];
-          $tabla_preTotal[$cont] = $preTotal;
+          $tabla_preUni[sizeof($tabla_preUni)] = $fila['preUnitario'];
+          $tabla_preTotal[sizeof($tabla_preTotal)] = $preTotal;
           $cont++;
         }
         $total = $totalNeto + $iva;
@@ -184,7 +203,7 @@
           mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
           VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$tipoCompraVenta')");//1-venta 2-compra
 
-          $idFactura = idFactura($tipo_factura,$num_factura);
+          $idFactura = idFactura($tipo_factura,$num_factura, $tipoCompraVenta);
 
           for ($i=0; $i < sizeof($tabla_id); $i++) {
             if ($tabla_id[$i] > 0){
@@ -200,17 +219,16 @@
                 $arrayId_insumo[sizeof($arrayId_insumo)] = $reg_res['id_insumo'];
               }
 
-              for ($i=0; $i < sizeof($cantResta); $i++) {
-                mysqli_query($conexion, "UPDATE insumos SET cantidad = '$cantResta[$i]' WHERE id_insumo = '$arrayId_insumo[$i]'");
-              }
 
               //agregar a detalle factura
               //existe info redundante respecto a la fecha, y total del importe total por productos ya que estos se encuentran en el encabezado
               mysqli_query($conexion, "INSERT INTO detallefactura (idFactura, id_producto, cantidad, preUnitario, bonificacion, preTotal)
-               VALUES('$idFactura','$tabla_id[$i]','$tabla_cant[$i]',$tabla_preUni[$i],'$descuento','$tabla_preTotal[$i]')");
-              // or die("Problemas en el select4:".mysqli_error($conexion));
-            };
-          };
+               VALUES ('$idFactura','$tabla_id[$i]','$tabla_cant[$i]',$tabla_preUni[$i],'$descuento','$tabla_preTotal[$i]')");
+               // or die("Problemas en el select4:".mysqli_error($conexion));
+            }
+
+          }
+          descuentoInsumo($cantResta,$arrayId_insumo);
           echo $num_factura;
         }else {
           echo 0;
@@ -223,6 +241,8 @@
           $tipoCompraVenta = $_POST['tipoCompraVenta'];
           if ($option == '1') {
             $array = array();
+            $time = $_POST['fecha'];
+            // $fecha = date('Y/m/d H:i:s',time());
             $cliente = $_POST['cliente_proveedor'];
             $formapago = $_POST['formapago'];
             $cant= $_POST['cant'];
@@ -328,7 +348,10 @@
           };
 
             $salida ="";
-            $resultProducto = mysqli_query($conexion,"SELECT i.descripcion, r.* FROM recetas as r INNER JOIN insumos as i on r.id_insumo = i.id_insumo WHERE r.id_producto ='$idProducto'");
+            $resultProducto = mysqli_query($conexion,"SELECT i.descripcion, r.*
+                                                      FROM recetas as r
+                                                      INNER JOIN insumos as i on r.id_insumo = i.id_insumo
+                                                      WHERE r.id_producto ='$idProducto'");
 
            	while($fila = $resultProducto -> fetch_assoc()){
            		$salida.="
@@ -389,9 +412,9 @@
     return $ultimo;
    }
 
-   function idFactura($tipo_factura, $num_factura){
+   function idFactura($tipo_factura, $num_factura,$tipo){
      include ('conexion.php');
-     $queryIdFactura = mysqli_query($conexion," SELECT idFactura FROM encabezadofactura WHERE tipComprob = '$tipo_factura' AND puntoVenta = '1' AND numComprob = '$num_factura'");
+     $queryIdFactura = mysqli_query($conexion," SELECT idFactura FROM encabezadofactura WHERE tipComprob = '$tipo_factura' AND puntoVenta = '1' AND numComprob = '$num_factura' and tipoCompraVenta = '$tipo'");
      $idFactura = mysqli_fetch_array($queryIdFactura);
 
      $idFactura = $idFactura[0];
@@ -403,7 +426,14 @@
     return str_pad($valor, $long, '0', STR_PAD_LEFT);
   }
 
+  function descuentoInsumo($cantidadRes, $cantInsumo){
+    include ('conexion.php');
+    for ($i=0; $i < sizeof($cantidadRes); $i++) {
+      mysqli_query($conexion, "UPDATE insumos SET cantidad = '$cantidadRes[$i]' WHERE id_insumo = '$cantInsumo[$i]'");
+    }
 
+
+  }
 
 
 

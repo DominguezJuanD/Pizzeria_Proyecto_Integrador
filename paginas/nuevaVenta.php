@@ -27,7 +27,7 @@
   						<form id="formulario">
 										<div class="fecha">
 											<b>Fecha:</b>
-	  									<input name="fecha" value="<?php echo date("d/m/Y");?>" readonly="readonly"/>
+	  									<input name="fecha" value="<?php echo date('d/m/Y',time());?>" readonly="readonly"/>
 										</div>
 
 

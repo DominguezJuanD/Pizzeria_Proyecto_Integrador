@@ -7,7 +7,7 @@ var id_tipo = 0;
 var sumaArray = [];
 var sumaPrecios = [];
 var tabla_id = [];
-var tabla_cant = [];
+var tipo=0;
 var num_id = [];
 var arrayprueba = [];
 var  id_fila;
@@ -67,7 +67,7 @@ function extraer_dinero()
 
 function buscarFacturas(){
 	var formBusqueda = $('#formBusqueda').serialize();
-
+	console.log(formBusqueda);
 	$.ajax({
 		url:'../php/consultas.php',
 		type:'POST',
@@ -85,12 +85,13 @@ function buscarFacturas(){
 	});
 }
 
-function detalleFactura(id){
+function detalleFactura(id,tipo){
+	console.log(tipo);
  console.log(id);
 	$.ajax({
 		url:'../php/consultas.php',
 		type:'POST',
-		data: 'Boton=detalleFactura&id='+id,
+		data: 'Boton=detalleFactura&id='+id+'&tipo='+tipo,
 		dataType: 'json',
 	}).done(function(resp){
 
