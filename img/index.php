@@ -1,0 +1,8 @@
+
+
+<?
+
+header('Location ../index.php');
+
+
+?>

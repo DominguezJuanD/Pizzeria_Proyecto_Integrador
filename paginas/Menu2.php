@@ -1,7 +1,18 @@
-<?
-?>
 
 <!DOCTYPE html>
+
+
+<?
+session_start();
+
+if (!isset($_SESSION['Id'])) {
+
+    header("Location: ../index.php");
+}
+
+
+
+?>
 <html lang="en" dir="ltr">
   <head>
 
@@ -16,9 +27,12 @@
 
   </head>
   <body>
+
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->
   <div class="fijo">
+    <b><? echo $_SESSION['Usuario']; ?></b>
       <div class="img"></div>
+
       <div id="menuH" >
         <nav>
           <ul class="nav">
@@ -47,6 +61,7 @@
 
                     <li><a href="nuevaVenta.php"> Factura Venta</a></li>
 
+
                     <li><a href="compra_insumo.php"> Factura Compra</a></li>
 
                   </ul>
@@ -64,7 +79,7 @@
               </li>
               <ul class="nav navbar-nav navbar-right">
 
-                <li><a href="cerrarSesion.php" class=" btn btn-warning"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a> </li>
+                <li><button class=" btn btn-warning" onclick="cerrarSesion();"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</button> </li>
             </ul>
 
           </ul>
@@ -74,5 +89,8 @@
     </div>
     <div class="contenido"></div>
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->
+  <script src="../librerias/jquery/jquery-3.2.1.min.js"></script>
+  <script src="../librerias/bootstrap/js/bootstrap.js"></script>
+  <script src="../js/funciones.js"></script>
   </body>
 </html>

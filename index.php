@@ -1,3 +1,16 @@
+
+
+<?
+session_start();
+
+if (isset($_SESSION['Id'])) {
+
+    header("Location: paginas/Menu2.php");
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 

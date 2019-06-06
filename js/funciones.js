@@ -12,7 +12,7 @@ function login(){
 		data: 'Boton=login&usuario='+usuario+'&pass='+pass,
 	}).done(function(resp){
 		if (resp) {
-			alert('logincorrecto');
+			alert('login correcto');
 			window.location="paginas/Menu2.php";
 		}else {
 			alert('error');
@@ -20,6 +20,23 @@ function login(){
 	});
 }
 
+function cerrarSesion(){
+
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=logout',
+	}).done(function(resp){
+		if (resp) {
+			alert('logout correcto');
+			window.location="../index.php";
+		}else {
+			alert('error');
+		}
+	});
+
+
+}
 
 
 //_______________________INSUMO_____________________________

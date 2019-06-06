@@ -1,14 +1,14 @@
 <?php
   include("conexion.php");
   $boton = $_POST['Boton'];
-
+  session_start();
   switch($boton){
 
 //==================================================================INICIO DE SESION ==================================================
     case 'login':
       $Usuario = $_POST['usuario'];
       $Contrasena =$_POST['pass'];
-      session_start();
+
       $login = FALSE;
       $result = mysqli_query($conexion,"SELECT * FROM persona WHERE usuario ='$Usuario' AND clave='$Contrasena';");
       if($Usua=mysqli_fetch_array($result)){
@@ -22,18 +22,10 @@
     };
     break;
 
-  // case 'cerrar':
-  //     session_start();
-  //     if (ini_get("session.use_cookies")) {
-  //       $params = session_get_cookie_params();
-  //       setcookie(session_name(), '', time() - 42000,
-  //         $params["path"], $params["domain"],
-  //         $params["secure"], $params["httponly"]
-  //       );
-  //     }
-  //     session_destroy();
-  //     echo TRUE;
-  //   break;
+  case 'logout':
+      session_destroy();
+      echo TRUE;
+    break;
 //=================================================busqueda de facturas ======================================================
     case 'buscarFacturas':
       $numFactura = $_POST['numFactura'];
