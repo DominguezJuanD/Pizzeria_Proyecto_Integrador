@@ -12,15 +12,11 @@ label{
 
 input{
 
-	width: 248px;
-
 	background: white;
 
 	color: black;
 
 	font-weight: bold;
-
-	border: ;
 
 }
 
@@ -49,7 +45,13 @@ button{
 
 }
 
+/* .container{
 
+	position:absolute;
+	left:50%;
+	top:50%;
+
+} */
 
 input.boton{
 
@@ -77,9 +79,13 @@ a{
 
 
 body{
-
-	background-repeat: repeat-y;
-
-	width: 100%;
-
+	justify-content: center;
+	background-image: url('../img/prueba1.1.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: auto;
+	height: auto;
+	margin:0;
+	border:0;
+	padding:0;
 }

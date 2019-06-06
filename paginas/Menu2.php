@@ -1,4 +1,5 @@
-
+<?
+?>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -18,49 +19,53 @@
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->
   <div class="fijo">
       <div class="img"></div>
-      <div id="menuH">
+      <div id="menuH" >
+        <nav>
           <ul class="nav">
 
-            <li><a href="Menu2.php"><i class="fas fa-home"></i> Inicio</a></li>
+              <li><a href="Menu2.php"><i class="fas fa-home"></i> Inicio</a></li>
 
-            <li><a href="listarClientes.php" ><i class="far fa-list-alt"></i> A.B.M's</a>
+              <li><a href="listarClientes.php" ><i class="far fa-list-alt"></i> A.B.M's</a>
 
-              <ul>
-                <li><a href="listarClientes.php" ><i class="fas fa-users"></i> Clientes</a></li>
+                  <ul>
+                    <li><a href="listarClientes.php" ><i class="fas fa-users"></i> Clientes</a></li>
 
-                <li><a href="listarProveedores.php"><i class="fas fa-store-alt"></i> Proveedores</a></li>
+                    <li><a href="listarProveedores.php"><i class="fas fa-store-alt"></i> Proveedores</a></li>
 
-                <li><a href="listarProductos.php"><i class="fas fa-utensils"></i> Productos</a></li>
+                    <li><a href="listarProductos.php"><i class="fas fa-utensils"></i> Productos</a></li>
 
-                <li><a href="listarInsumos.php"><i class="fas fa-mug-hot"></i> Insumos</a></li>
+                    <li><a href="listarInsumos.php"><i class="fas fa-mug-hot"></i> Insumos</a></li>
 
-                <!-- <li><a href=""><i class="fas fa-cookie-bite"></i> Recetas</a></li> -->
+                    <!-- <li><a href=""><i class="fas fa-cookie-bite"></i> Recetas</a></li> -->
 
-              </ul>
+                  </ul>
 
-            </li>
+              </li>
 
-            <li><a href=""><i class="fas fa-file-invoice-dollar"></i> Facturas</a>
-              <ul>
+              <li><a href=""><i class="fas fa-file-invoice-dollar"></i> Facturas</a>
+                  <ul>
 
-                <li><a href="nuevaVenta.php"> Factura Venta</a></li>
+                    <li><a href="nuevaVenta.php"> Factura Venta</a></li>
 
-                <li><a href="compra_insumo.php"> Factura Compra</a></li>
+                    <li><a href="compra_insumo.php"> Factura Compra</a></li>
 
-              </ul>
+                  </ul>
 
-            </li>
-            <li><a href=""><i class="fas fa-database"></i> Movimientos</a>
+              </li>
+              <li><a href=""><i class="fas fa-database"></i> Movimientos</a>
 
-              <ul>
+                  <ul>
 
-                <a href="buscarFacturas.php" id="mostrar-compras"> Num. Factura </a>
-                <a href="buscarFacturas.php" id="mostrar-compras"> Fac. Desde-Hasta </a>
+                    <a href="buscarFacturas.php" id="mostrar-compras"> Num. Factura </a>
+                    <a href="buscarFacturas.php" id="mostrar-compras"> Fac. Desde-Hasta </a>
 
-              </ul>
+                  </ul>
 
-            </li>
-            <li><a href="cerrarSesion.php"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></li>
+              </li>
+              <ul class="nav navbar-nav navbar-right">
+
+                <li><a href="cerrarSesion.php" class=" btn btn-warning"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a> </li>
+            </ul>
 
           </ul>
 

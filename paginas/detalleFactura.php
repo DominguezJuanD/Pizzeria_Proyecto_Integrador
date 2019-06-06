@@ -28,7 +28,7 @@
   				 <!-- aca termina empieza otra parte  -->
   					<fieldset>
   						<h3 align="center" >Factura</h3>
-  						<form id="formulario">
+  						<form id="formulario" >
 										<div class="fecha">
 											<b>Fecha/Hora:</b>
 	  									<input id="fecha" readonly="readonly"/>
@@ -38,13 +38,13 @@
 										<div class="atendio">
 											<b>Atendio: </b>
 											<input type="text"  readonly="readonly" id="Atendio">
-											<input type="text" readonly="readonly" id="usuario">
+											<input type="text" readonly="readonly" id="usuario" size="1">
 										</div>
 
 
 										<div class="tipoFactura">
 											<b>Tipo Factura</b>
-                      <input type="text" readonly="readonly" id="facturaTipo">
+                      <input type="text" readonly="readonly" id="facturaTipo" size="1">
 											</div>
                       <br>
 										<table style="width:100%">
@@ -65,7 +65,7 @@
 												</td>
 												<td>
 			                    <b>Telefono: </b>
-			                    <input type="text" id="telefono"  size="10" readonly="readonly">
+			                    <input type="text" id="telefono"  readonly="readonly">
 												</td>
 												</tr>
 
@@ -83,6 +83,12 @@
 					                    <b>Descuento :</b>
 
 					                    <input type="text"  id="Descuento" readonly="readonly" size="1">
+															</td>
+
+															<td>
+																<br>
+																<br>
+																<a href="buscarFacturas.php" class='btn btn-danger' role="button" type="button">Volver</a>
 															</td>
 
 													</tr>
@@ -112,10 +118,8 @@
 	                    <td style="width:50%">Producto</td>
 
 	                    <td style="width:10%"> Cantidad </td>
-	                    <td style="width:10%"> Pre. Unitario $ </td>
-	                    <td style="width:10%"> Pre. Total $ </td>
-
-	                    <td style="width:10%">________ </td>
+	                    <td style="width:15%"> Pre. Unitario $ </td>
+	                    <td style="width:15%"> Pre. Total $ </td>
 
 										</thead>
 										<tbody id="productos" style="width:100%"  class='tabla_datos table table-striped'></tbody>

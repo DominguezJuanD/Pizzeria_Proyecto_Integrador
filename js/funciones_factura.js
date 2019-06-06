@@ -101,12 +101,17 @@ function detalleFactura(id,tipo){
 		// var datos = eval(resp);
 		console.log(resp.idFactura);
 		$('#fecha').val(resp.fecha);
-		// $('#totalneto').val(resp.totalneto);
-		$('#cliente').val(resp.nombre);
-		// $('#total').val(resp.total);
-		//
-		// $('#totalnetoC').val(resp.totalnetoC);
-		// $('#totalC').val(resp.totalC);
+		$('#usuario').val(resp.usuario_carga);
+		$('#facturaTipo').val(resp.tipComprob);
+	 	$('#cliente').val(resp.nombre);
+		$('#id_cliente').val(resp.idCliente);
+		$('#direccion').val(resp.direccion);
+		$('#telefono').val(resp.telefono);
+		$('#formaPago').val(resp.descFormapago);
+		$('#Descuento').val(resp.bonificacion);
+		$('#totalneto').val(resp.subtotal);
+		$('#iva').val(resp.iva);
+		$('#total').val(resp.total);
 	});
 }
 

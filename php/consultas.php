@@ -4,6 +4,37 @@
 
   switch($boton){
 
+//==================================================================INICIO DE SESION ==================================================
+    case 'login':
+      $Usuario = $_POST['usuario'];
+      $Contrasena =$_POST['pass'];
+      session_start();
+      $login = FALSE;
+      $result = mysqli_query($conexion,"SELECT * FROM persona WHERE usuario ='$Usuario' AND clave='$Contrasena';");
+      if($Usua=mysqli_fetch_array($result)){
+        $_SESSION['Id']=$Usua['clave'];
+        $_SESSION['Usuario']=$Usua['usuario'];
+        // $_SESSION['']='YES';
+        $login = TRUE;
+        echo $login;
+    }else{
+      echo $login;
+    };
+    break;
+
+  // case 'cerrar':
+  //     session_start();
+  //     if (ini_get("session.use_cookies")) {
+  //       $params = session_get_cookie_params();
+  //       setcookie(session_name(), '', time() - 42000,
+  //         $params["path"], $params["domain"],
+  //         $params["secure"], $params["httponly"]
+  //       );
+  //     }
+  //     session_destroy();
+  //     echo TRUE;
+  //   break;
+//=================================================busqueda de facturas ======================================================
     case 'buscarFacturas':
       $numFactura = $_POST['numFactura'];
       $puntoVenta = $_POST['puntoVenta'];
@@ -30,14 +61,15 @@
 
           echo json_encode($tabla);
       break;
-
+//=======================================================detalle de facturas ===============================================
       case 'detalleFactura':
         // $tabla = array();
         $id=$_POST['id'];
         $tipo = $_POST['tipo'];
-        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y') as fecha, ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono
+        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i:%s') as fecha, fp.descFormapago ,ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono
                                         FROM encabezadofactura as ef
                                         INNER join persona as p on p.id_persona = ef.idCliente
+                                        INNER join formapago as fp on fp.idFormaPago = ef.formaPago
                                         WHERE ef.idFactura = '$id' ");
 
         while( $fila1 = $query -> fetch_assoc()){
@@ -59,15 +91,14 @@
 
 
         while( $fila = $query2 -> fetch_assoc()){
-          // $tabla=$fila;
+
           $salida.="
           <tr bgcolor='white'>
           <td style='width:10%'>".$fila['id_producto']."</td>
           <td style='width:50%'>".$fila['descripcion']."</td>
           <td style='width:10%'>".$fila['cantidad']."</td>
-          <td style='width:10%'>".$fila['preUnitario']."</td>
-          <td style='width:10%'>".$fila['preTotal']."</td>
-          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."'></a></td></tr>";
+          <td style='width:15%'>".$fila['preUnitario']."</td>
+          <td style='width:15%'>".$fila['preTotal']."</td>";
 
           }
           // $tabla['enca'] = $tabla3;
@@ -200,8 +231,8 @@
           $total = $total - $descuento;
           //el descuento lo hice general y no por producto kbe el chori
           //por ahora agrego 0 al iva, y compro como cons final
-          mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
-          VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$tipoCompraVenta')");//1-venta 2-compra
+          mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, bonificacion, tipoCompraVenta)
+          VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$descuento', '$tipoCompraVenta')");//1-venta 2-compra
 
           $idFactura = idFactura($tipo_factura,$num_factura, $tipoCompraVenta);
 
@@ -222,8 +253,8 @@
 
               //agregar a detalle factura
               //existe info redundante respecto a la fecha, y total del importe total por productos ya que estos se encuentran en el encabezado
-              mysqli_query($conexion, "INSERT INTO detallefactura (idFactura, id_producto, cantidad, preUnitario, bonificacion, preTotal)
-               VALUES ('$idFactura','$tabla_id[$i]','$tabla_cant[$i]',$tabla_preUni[$i],'$descuento','$tabla_preTotal[$i]')");
+              mysqli_query($conexion, "INSERT INTO detallefactura (idFactura, id_producto, cantidad, preUnitario, preTotal)
+               VALUES ('$idFactura','$tabla_id[$i]','$tabla_cant[$i]',$tabla_preUni[$i],'$tabla_preTotal[$i]')");
                // or die("Problemas en el select4:".mysqli_error($conexion));
             }
 
