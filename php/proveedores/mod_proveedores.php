@@ -3,10 +3,10 @@
 	$id = $_REQUEST['id'];
 	$razon_social = $_POST['razon_social'];
 	$telefono = $_POST['telefono'];
-	$tipo = $_POST['tipo'];
+	$direccion = $_POST['direccion'];
 	$fe_ini = $_POST['fe_ini'];
 
-	$query = "UPDATE Proveedores SET  razon_social= '$razon_social', telefono= '$telefono', tipo = '$tipo',fe_ini= '$fe_ini' WHERE id_proveedor= '$id' ";
+	$query = "UPDATE persona SET  nombre = '$razon_social', telefono= '$telefono', direccion = '$direccion', fec_nac= '$fe_ini' WHERE id_persona= '$id' ";
 	$resultado = $conexion -> query($query);
 
 	if($resultado){

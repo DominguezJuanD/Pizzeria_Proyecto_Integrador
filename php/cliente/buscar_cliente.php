@@ -1,11 +1,11 @@
 <?php
-require("../../php/conexion.php");
+require("../conexion.php");
 $salida ="";
-$query = "SELECT * FROM persona WHERE baja_logica='1' ";
+$query = "SELECT * FROM persona WHERE baja_logica='1' and id_tipo_persona = '2'";
 
 if(isset($_POST['consulta'])){
 	$id = $conexion -> real_escape_string($_POST['consulta']);
-	$query = "SELECT id_persona,nombre, telefono, direccion, fec_nac FROM persona WHERE baja_logica = '1' and (nombre like '%".$id."%' or telefono like '%".$id."%' or direccion like '%".$id."%' or fec_nac like '%".$id."%') ";
+	$query = "SELECT * FROM persona WHERE id_tipo_persona = '2' and baja_logica = '1' and (nombre like '%".$id."%' or telefono like '%".$id."%' or cuit like '%".$id."%' or direccion like '%".$id."%') ";
 }
 
 $resultado = $conexion -> query($query);
@@ -36,7 +36,7 @@ if($resultado->num_rows > 0){
 
 				<td><a href='../paginas/modificar_cliente.php?id=$fila[id_persona]' class='btn btn-success btn-sm'><i class='fas fa-edit'></i> Editar</a></td>
 
-				<td><a href='../../cliente/eliminar_cliente.php?id=$fila[id_persona]' class='btn btn-danger btn-sm'><i class='fas fa-trash-alt'></i> Eliminar</a></td>
+				<td><a href='../php/cliente/eliminar_cliente.php?id=$fila[id_persona]' class='btn btn-danger btn-sm'><i class='fas fa-trash-alt'></i> Eliminar</a></td>
 
 		</tr>";
 

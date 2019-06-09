@@ -21,6 +21,7 @@ if (!isset($_SESSION['Id'])) {
 
 
     <link rel="stylesheet" href="../librerias/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../librerias/alertifyjs/css/alertify.css">
     <meta charset="utf-8">
 
     <title>prueba</title>
@@ -77,7 +78,7 @@ if (!isset($_SESSION['Id'])) {
                   </ul>
 
               </li>
-              <ul class="nav navbar-nav navbar-right">
+              <ul class="cerrar">
 
                 <li><button class=" btn btn-warning" onclick="cerrarSesion();"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</button> </li>
             </ul>
@@ -88,9 +89,12 @@ if (!isset($_SESSION['Id'])) {
       </div>
     </div>
     <div class="contenido"></div>
+    <span class="usuario"><b>Bienvenido: <? echo $_SESSION['Nombre']?>[<?echo $_SESSION['Id']?>]</b></span>
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->
   <script src="../librerias/jquery/jquery-3.2.1.min.js"></script>
   <script src="../librerias/bootstrap/js/bootstrap.js"></script>
+  <script src="../librerias/alertifyjs/alertify.min.js"></script>
+  <!-- <script type="../librerias/alertifyjs/css/alertify.css"></script> -->
   <script src="../js/funciones.js"></script>
   </body>
 </html>

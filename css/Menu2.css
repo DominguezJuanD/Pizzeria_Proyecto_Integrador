@@ -18,6 +18,13 @@ body {
 }
 
 
+.usuario{
+  margin-right:  10%;
+  float: right;
+
+}
+
+
 .conexion{
   text-align: right;
   color: #000000;

@@ -5,11 +5,11 @@
 	$id = $_REQUEST['id'];
 	$var = 0;
 
-	$query = "UPDATE Proveedores SET baja_logica = '$var' WHERE id_proveedor= '$id' ";
+	$query = "UPDATE persona SET baja_logica = '$var' WHERE id_persona= '$id' ";
 	$resultado = $conexion -> query($query);
 
 	if($resultado){
-		header("location: lista_proveedores.php");
+		header("location: ../../paginas/listarProveedores.php");
 	}else{
 		echo "no se pudo";
 	}

@@ -27,24 +27,36 @@ $(document).on('keyup','#caja_busqueda', function(){
 
 
 // funcion para dar el alta a un nuevo proveedor
-$(document).ready(function(){
-	$('#ProForm').submit(function(){
+function altaProveedor(){
 	$('#resultado').text("funciona");
-	// var cuit = $('#cuit').val();
+  var cuit = $('#cuit').val();
 	var razon_social = $("#razon_social").val();
 	var telefono = $('#telefono').val();
 	var tipo = $("#tipo").val();
 	var fe_in = $("#fe_in").val();
+	var direccion =$("#direccion").val();
 
 	$.ajax({
 		type : "POST",
 		url : '../php/altasCliente_Proveedor.php',
-		data : {razon_social:razon_social, telefono:telefono, tipo:tipo, fe_in:fe_in, modo: '2'},
+		data : {razon_social:razon_social, cuit:cuit ,telefono:telefono,direccion:direccion , tipo:tipo, fe_in:fe_in, modo: '2'},
 		//cache : false,
 		success: function(data){
-			$('#resultado').html(data);
+			if (data) {
+				alertify.success("CORRECTO!! El Proveedor Fue Registrado");
+				limpiar();
+				// $('#resultado').html(data);
+			}else {
+				alertify.error("Usuario no disponible.");
+				limpiar();
+				$('#resultado').html(data);
+			}
 		}
 	});
-	return false;
-	});
-});
+}
+
+function limpiar(){
+	$("#ProForm [type='text']").val("");//limpiar formulario (todos los  type="text")
+	$("#ProForm [type='number']").val(0);//loimpiar select de los formulario
+	$("#ProForm [type='date']").val("");
+}

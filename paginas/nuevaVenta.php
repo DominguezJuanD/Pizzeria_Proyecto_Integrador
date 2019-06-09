@@ -33,8 +33,8 @@
 
 										<div class="atendio">
 											<b>Atendio: </b>
-											<input type="text"  value="yo">
-											<input type="text" name="id_usuario" value="1309">
+											<input type="text"  value="<?echo $_SESSION['Nombre']?>" readonly="readonly">
+											<input type="text" name="id_usuario" value="<?echo $_SESSION['Id']?>" readonly="readonly" size="1">
 										</div>
 
 

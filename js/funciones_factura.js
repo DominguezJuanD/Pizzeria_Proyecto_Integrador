@@ -198,7 +198,7 @@ function eliminarFila(nfila){
 function factura_venta_producto(tipo){//tipo = (1-venta 2-compra)
 
 	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
-	console.log(tabla_cant);
+	// console.log(tabla_cant);
 	console.log(tipo);
 	if (statusConfirm == true){
 		var data_form = $("#formulario").serialize()

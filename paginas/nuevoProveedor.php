@@ -41,19 +41,26 @@
 				    	</div>
 				 	</div>
 
+					<div class="form-group">
+						<h4><label for="direccion" class="col-sm-2 control-label">Direccion</label></h4>
+						<div class="col-sm-10">
+								<input type="text"  REQUIRED class="form-control" id="direccion" placeholder="Ing. Direccion">
+						</div>
+					</div>
+
 				 	<div class="form-group">
 						<h4><label for="telefono" class="col-sm-4 control-label">Telefono</label></h4>
 					    <div class="col-sm-10">
-					      <input type="tel" REQUIRED class="form-control" id="telefono" pattern="^\d{10}$" placeholder="Ing. Telefono: 123456789...">
+					      <input type="number" REQUIRED class="form-control" id="telefono" pattern="^\d{10}$" placeholder="Ing. Telefono: 123456789...">
 					    </div>
 				  	</div>
-
+<!--
 				  <div class="form-group">
 				    	<h4><label for="tipo" class="col-sm-4 control-label">Tipo.</label></h4>
 				    	<div class="col-sm-10">
 				      		<input type="tel" REQUIRED class="form-control" id="tipo" placeholder="Ing. Tipo">
 				    	</div>
-				  </div>
+				  </div> -->
 
 				   	<div class="form-group">
 				    	<h4><label for="fe_in" class="col-sm-4 control-label">Fecha Inicio</label></h4>
@@ -64,7 +71,7 @@
 
 				  <div class="form-group">
 				    	<div class="col-sm-offset- col-sm-10">
-				      		<button type="submit" id= "registrar" class="btn btn-success"><i class="fas fa-check-square"></i> Registrar</button>
+				      		<button type="button" id= "registrar" class="btn btn-success" onclick="altaProveedor();"><i class="fas fa-check-square"></i> Registrar</button>
 									<a class="btn btn-danger" href="listarProveedores.php" role="button"><i class="fas fa-window-close"></i> Cancelar</a>
 				    	</div>
 				  </div>
@@ -78,24 +85,3 @@
 	<script src="../js/JSproveedores.js"></script> <!-- mando los datos a cargar datos -->
 </body>
 </html>
-
-
-<?php
-
-// 	if (strpos(strtoupper($_SERVER['HTTP_USER_AGENT']),'ANDROID')||strpos(strtoupper($_SERVER['HTTP_USER_AGENT']),'MOBILE')){
-//
-// 				echo '<body  style="background-color:LightCyan">';
-//
-// 			}else{
-//
-// 				echo '<body  background = "fondo3.jpg">';
-//
-// 			}
-//
-// }else{
-//
-// 	echo "<script> window.location = 'index.php'; </script>";
-//
-// }
-
-?>

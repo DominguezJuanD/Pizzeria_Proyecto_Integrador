@@ -10,16 +10,15 @@
       $Contrasena =$_POST['pass'];
 
       $login = FALSE;
-      $result = mysqli_query($conexion,"SELECT * FROM persona WHERE usuario ='$Usuario' AND clave='$Contrasena';");
-      if($Usua=mysqli_fetch_array($result)){
-        $_SESSION['Id']=$Usua['clave'];
-        $_SESSION['Usuario']=$Usua['usuario'];
-        // $_SESSION['']='YES';
+      $result = mysqli_query($conexion,"SELECT * FROM usuarios WHERE nombre ='$Usuario' AND contrasenia='$Contrasena';");
+      if(($Usua=mysqli_fetch_array($result)) != NULL){
+        $_SESSION['Nombre']=$Usua['nombre'];
+        $_SESSION['Id']=$Usua['id_usuario'];
         $login = TRUE;
         echo $login;
-    }else{
-      echo $login;
-    };
+      }else{
+        echo $login;
+      };
     break;
 
   case 'logout':

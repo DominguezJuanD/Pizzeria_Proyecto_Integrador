@@ -1,15 +1,15 @@
 <?php
-	require("../php/conexion.php");
+require("../conexion.php");
 
 
 	$id = $_REQUEST['id'];
 	$var = 0;
 
-	$query = "UPDATE clientes SET baja_logica = '$var' WHERE idCliente= '$id' ";
+	$query = "UPDATE persona SET baja_logica = '$var' WHERE id_persona= '$id' ";
 	$resultado = $conexion -> query($query);
 
 	if($resultado){
-		header("location: lista_cliente.php");
+		header("location: ../../paginas/listarClientes.php");
 	}else{
 		echo "no se pudo";
 	}
