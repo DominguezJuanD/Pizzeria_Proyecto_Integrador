@@ -27,7 +27,8 @@
 
   				 <!-- aca termina empieza otra parte  -->
   					<fieldset>
-  						<h3 align="center" >Factura</h3>
+  						<h3 align="center" id="titulo"></h3>
+							<br>
   						<form id="formulario" >
 										<div class="fecha">
 											<b>Fecha/Hora:</b>
@@ -37,16 +38,17 @@
 
 										<div class="atendio">
 											<b>Atendio: </b>
-											<input type="text"  readonly="readonly" id="Atendio">
+											<input type="text"  readonly="readonly" id="atendio">
 											<input type="text" readonly="readonly" id="usuario" size="1">
 										</div>
 
 
-										<div class="tipoFactura">
+										<!-- <div class="tipoFactura">
 											<b>Tipo Factura</b>
                       <input type="text" readonly="readonly" id="facturaTipo" size="1">
-											</div>
+											</div> -->
                       <br>
+											<br>
 										<table style="width:100%">
 											<thead>
 												<tr>

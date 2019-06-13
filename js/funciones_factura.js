@@ -63,57 +63,6 @@ function extraer_dinero()
 	}
 }
 
-//=================================================== Busqueda de factura ==================================================================================
-
-function buscarFacturas(){
-	var formBusqueda = $('#formBusqueda').serialize();
-	console.log(formBusqueda);
-	$.ajax({
-		url:'../php/consultas.php',
-		type:'POST',
-		data: 'Boton=buscarFacturas&'+formBusqueda,
-		dataType: 'json',
-	}).done(function(resp){
-		// console.log(resp.puntoVenta);
-		$('#listas').html(resp.tabla);
-		// $('#totalneto').val(resp.totalneto);
-		// $('#iva').val(resp.iva);
-		// $('#total').val(resp.total);
-		//
-		// $('#totalnetoC').val(resp.totalnetoC);
-		// $('#totalC').val(resp.totalC);
-	});
-}
-
-function detalleFactura(id,tipo){
-	console.log(tipo);
- console.log(id);
-	$.ajax({
-		url:'../php/consultas.php',
-		type:'POST',
-		data: 'Boton=detalleFactura&id='+id+'&tipo='+tipo,
-		dataType: 'json',
-	}).done(function(resp){
-
-		// console.log(resp.cosas);
-
-		$('#productos').html(resp.tabla);
-		// var datos = eval(resp);
-		console.log(resp.idFactura);
-		$('#fecha').val(resp.fecha);
-		$('#usuario').val(resp.usuario_carga);
-		$('#facturaTipo').val(resp.tipComprob);
-	 	$('#cliente').val(resp.nombre);
-		$('#id_cliente').val(resp.idCliente);
-		$('#direccion').val(resp.direccion);
-		$('#telefono').val(resp.telefono);
-		$('#formaPago').val(resp.descFormapago);
-		$('#Descuento').val(resp.bonificacion);
-		$('#totalneto').val(resp.subtotal);
-		$('#iva').val(resp.iva);
-		$('#total').val(resp.total);
-	});
-}
 
 
 
@@ -251,7 +200,145 @@ function factura_compra_insumo(tipo){//tipo = (1-venta 2-compra)
 	};
 }
 
+//=================================================== Busqueda de factura ==================================================================================
 
+function buscarFacturas(){
+	var formBusqueda = $('#formBusqueda').serialize();
+	console.log(formBusqueda);
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=buscarFacturas&'+formBusqueda,
+		dataType: 'json',
+	}).done(function(resp){
+		// console.log(resp.puntoVenta);
+		$('#listas').html(resp.tabla);
+		// $('#totalneto').val(resp.totalneto);
+		// $('#iva').val(resp.iva);
+		// $('#total').val(resp.total);
+		//
+		// $('#totalnetoC').val(resp.totalnetoC);
+		// $('#totalC').val(resp.totalC);
+	});
+}
+
+function detalleFactura(id,tipo){
+	console.log(tipo);
+ console.log(id);
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=detalleFactura&id='+id+'&tipo='+tipo,
+		dataType: 'json',
+	}).done(function(resp){
+
+		// console.log(resp.cosas);
+
+		$('#productos').html(resp.tabla);
+		var titulo = "Factura Tipo "+resp.tipComprob+" : "+ponerCeros(resp.puntoVenta,4)+"-"+ponerCeros(resp.numComprob,8);
+		$('#titulo').text(titulo);
+		console.log(resp.idFactura);
+		$('#fecha').val(resp.fecha);
+		$('#usuario').val(resp.usuario_carga);
+		$('#atendio').val(resp.atendio);
+		$('#facturaTipo').val(resp.tipComprob);
+	 	$('#cliente').val(resp.nombre);
+		$('#id_cliente').val(resp.idCliente);
+		$('#direccion').val(resp.direccion);
+		$('#telefono').val(resp.telefono);
+		$('#formaPago').val(resp.descFormapago);
+		$('#Descuento').val(resp.bonificacion);
+		$('#totalneto').val(resp.subtotal);
+		$('#iva').val(resp.iva);
+		$('#total').val(resp.total);
+	});
+}
+
+function ponerCeros(obj, lon) {
+  while (obj.length < lon)
+    obj = '0'+obj;
+		return obj;
+}
+
+
+// ==========================================factura desde hasta =========================================
+
+$('#tipofactura2').change(function(){
+	$('#listasSola').html("");
+	$('#listas').html("");
+	$('#listas1').html("");
+
+	if ($('#tipofactura2').val() == '0') {
+
+		$("#tabla_sola").hide();
+		$("#tabla_doble").show();
+	}else {
+		$("#tabla_sola").show();
+		$("#tabla_doble").hide();
+	}
+});
+
+// $('#tipo_factura').change(function(){
+// 	if ($('#tipo_factura').val() == 'A') {
+// 		$('#triva').show();
+// 	}else{
+// 		$('#triva').hide();
+// 		$('#ivaC').val(0);
+// 	}
+// });
+
+
+function desdeHasta(){
+
+	var formBusqueda = $('#formBusqueda').serialize();
+	// console.log(formBusqueda);
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=desdeHasta&'+formBusqueda,
+		dataType: 'json',
+	}).done(function(resp){
+
+		console.log(resp.tabla);
+		$("#saldo").text(resp.saldoAnterior);
+		if (resp.tipo == "0") {
+			$("#tabla_doble").show();
+			if (resp.tabla || resp.tabla2) {
+				$('#listas').html(resp.tabla);
+				$('#listas1').html(resp.tabla2);
+			}else {
+				alertify.error("No se Encontraron Faturas");
+			}
+
+		}else if (resp.tipo == "1") {
+			$("#tabla_sola").show();
+			if (resp.tabla) {
+				$('#listasSola').html(resp.tabla);
+			}else {
+				alertify.error("No se Encontraron Faturas");
+			}
+		}else {
+			$("#tabla_sola").show();
+
+			if (resp.tabla) {
+					$('#listasSola').html(resp.tabla);
+			}else {
+				alertify.error("No se Encontraron Faturas");
+			}
+
+		}
+
+
+		// $('#totalneto').val(resp.totalneto);
+		// $('#iva').val(resp.iva);
+		// $('#total').val(resp.total);
+		//
+		// $('#totalnetoC').val(resp.totalnetoC);
+		// $('#totalC').val(resp.totalC);
+	});
+
+
+}
 
 
 

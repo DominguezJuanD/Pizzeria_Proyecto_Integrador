@@ -26,7 +26,7 @@
       echo TRUE;
     break;
 //=================================================busqueda de facturas ======================================================
-    case 'buscarFacturas':
+    case 'buscarFacturas': // por nuemro de factura
       $numFactura = $_POST['numFactura'];
       $puntoVenta = $_POST['puntoVenta'];
       $tipo_factura = $_POST['tipofactura'];
@@ -45,22 +45,95 @@
           <td style='width:10%'>".$fila['usuario_carga']."</td>
           <td style='width:20%'>".$fila['fecha']."</td>
           <td style='width:10%'>".$fila['total']."</td>
-          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=".$tipo_factura."'>Detalle</a></td></tr>";
+          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=".$tipo_factura."' target='_blank'>Detalle</a></td></tr>";
           }
 
           $tabla['tabla'] = $salida;
 
           echo json_encode($tabla);
       break;
+
+
+      case 'desdeHasta': // por fecha desde hasta
+        $tipoComp = $_POST['tipofactura'];
+        // $desde = date_format($_POST['desde'],'%Y/%m/%d');
+        // $hasta = date_format($_POST['hasta'],'%Y/%m/%d');
+        $desde = $_POST['desde'];
+        $hasta = $_POST['hasta'];
+        $desde = $desde." 00:00:00";
+        $hasta = $hasta." 23:59:59";
+
+        $quey =mysqli_query($conexion,"SELECT sum(total) as total FROM encabezadofactura where fechaComprob < '$desde'");
+        $saldoAnterior=mysqli_fetch_array($quey);
+        $tabla['saldoAnterior'] = $saldoAnterior['total'];
+
+        $result_venta = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
+                                          FROM encabezadofactura as ef
+                                          WHERE ef.tipoCompraVenta = '1'
+                                          and ef.fechaComprob between '$desde' and '$hasta'
+                                          ORDER BY ef.fechaComprob ASC");
+
+                while( $fila = $result_venta -> fetch_assoc()){
+                  $venta.="
+                  <tr bgcolor='white'>
+                  <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
+                  <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+                  <td style='width:10%'>".$fila['usuario_carga']."</td>
+                  <td style='width:10%'>".$fila['fecha']."</td>
+                  <td style='width:10%'>".$fila['total']."</td>
+                  <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=1' target='_blank'>Detalle</a></td></tr>";
+                  $total+=$fila['total'];
+                  }
+                  if (sizeof($fila)) {
+                    $venta .= relleno($total);
+                  }
+
+
+
+        $result = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
+                                          FROM encabezadofactura as ef
+                                          WHERE ef.tipoCompraVenta = '2'
+                                          and ef.fechaComprob between '$desde' and '$hasta'
+                                          ORDER BY ef.fechaComprob ASC");
+
+                while( $fila = $result -> fetch_assoc()){
+                  $compra.="
+                  <tr bgcolor='white'>
+                  <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
+                  <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+                  <td style='width:10%'>".$fila['usuario_carga']."</td>
+                  <td style='width:10%'>".$fila['fecha']."</td>
+                  <td style='width:10%'>".$fila['total']."</td>
+                  <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=2' target='_blank'>Detalle</a></td></tr>";
+                  $total_compra+=$fila['total'];
+                  }
+                  if(sizeof($fila)){
+                    $compra .= relleno($total_compra);
+                  }
+                  if ($tipoComp == '1') {
+                    $tabla['tabla'] = $venta;
+                  }elseif ($tipoComp == '2') {
+                    $tabla['tabla'] = $compra;
+                  }else {
+                    $tabla['tabla'] = $venta;
+                    $tabla['tabla2'] = $compra;
+                  }
+                  $tabla['tipo'] = $tipoComp;
+
+                  echo json_encode($tabla);
+      break;
+
+
 //=======================================================detalle de facturas ===============================================
       case 'detalleFactura':
         // $tabla = array();
         $id=$_POST['id'];
         $tipo = $_POST['tipo'];
-        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i:%s') as fecha, fp.descFormapago ,ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono
+        $query = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i:%s') as fecha, fp.descFormapago ,ef.* ,p.id_persona, p.nombre,p.direccion, p.telefono, u.nombre as atendio
                                         FROM encabezadofactura as ef
                                         INNER join persona as p on p.id_persona = ef.idCliente
                                         INNER join formapago as fp on fp.idFormaPago = ef.formaPago
+                                        INNER Join usuarios as u on u.id_usuario = ef.usuario_carga
                                         WHERE ef.idFactura = '$id' ");
 
         while( $fila1 = $query -> fetch_assoc()){
@@ -455,6 +528,18 @@
     }
 
 
+  }
+
+  function relleno($total){
+    $tabla.="<tr>
+              <td style='width:5%'> </td>
+              <td style='width:10%'> </td>
+              <td style='width:10%'> </td>
+              <td style='width:10%'>Total</td>
+              <td style='width:10%'>".$total."</td>
+              <td style='width:5%'>----</td>
+              </tr>";
+    return $tabla;
   }
 
 

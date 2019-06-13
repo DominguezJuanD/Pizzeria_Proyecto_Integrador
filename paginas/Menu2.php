@@ -3,6 +3,7 @@
 
 
 <?
+include("../php/conexion.php");
 session_start();
 
 if (!isset($_SESSION['Id'])) {
@@ -24,7 +25,7 @@ if (!isset($_SESSION['Id'])) {
     <link rel="stylesheet" href="../librerias/alertifyjs/css/alertify.css">
     <meta charset="utf-8">
 
-    <title>prueba</title>
+    <title>Baloo Pizza</title>
 
   </head>
   <body>
@@ -73,7 +74,7 @@ if (!isset($_SESSION['Id'])) {
                   <ul>
 
                     <a href="buscarFacturas.php" id="mostrar-compras"> Num. Factura </a>
-                    <a href="buscarFacturas.php" id="mostrar-compras"> Fac. Desde-Hasta </a>
+                    <a href="desdeHastaFactura.php" id="mostrar-compras"> Fac. Desde-Hasta </a>
 
                   </ul>
 
@@ -91,10 +92,14 @@ if (!isset($_SESSION['Id'])) {
     <div class="contenido"></div>
     <span class="usuario"><b>Bienvenido: <? echo $_SESSION['Nombre']?>[<?echo $_SESSION['Id']?>]</b></span>
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->
+
+
+<!-- aca estan todos los js que se nececitan para las paginas  -->
   <script src="../librerias/jquery/jquery-3.2.1.min.js"></script>
   <script src="../librerias/bootstrap/js/bootstrap.js"></script>
   <script src="../librerias/alertifyjs/alertify.min.js"></script>
   <!-- <script type="../librerias/alertifyjs/css/alertify.css"></script> -->
   <script src="../js/funciones.js"></script>
+  <script src= "../js/funciones_factura.js"></script>
   </body>
 </html>

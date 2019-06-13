@@ -6,7 +6,7 @@
 	//
 	// if (@isset($_SESSION['user'])){
 
-	include("../php/conexion.php");
+	// include("../php/conexion.php");
 	include("Menu2.php");
 ?>
 
@@ -72,6 +72,3 @@
         </div>
     </form>
 </body>
-
-<script src="../librerias/jquery/jquery-3.2.1.min.js"></script>
-<script src= "../js/funciones_factura.js"></script>
