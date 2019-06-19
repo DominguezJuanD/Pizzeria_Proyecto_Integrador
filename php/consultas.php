@@ -4,6 +4,15 @@
   session_start();
   switch($boton){
 
+
+
+
+    case 'borrar':
+        $tipoCompraVenta = $_POST['tipoCompraVenta'];//1-venta 2-compra
+
+        eliminarDetalleNovedad($tipoCompraVenta);
+        echo "borrado";
+      break;
 //==================================================================INICIO DE SESION ==================================================
     case 'login':
       $Usuario = $_POST['usuario'];
@@ -250,6 +259,7 @@
              VALUES('$idFactura','$tabla_id[$i]','$tabla_cant[$i]',$tabla_preUni[$i],'$descuento','$tabla_preTotal[$i]')");
           };
         };
+        eliminarDetalleNovedad($tipoCompraVenta);
         echo $num_factura;
       }else {
         echo 0;
@@ -266,6 +276,7 @@
         $tipo_factura = $_POST['tipofactura'];
         $descuento = $_POST['Descuento'];
         $tipoCompraVenta = $_POST['tipoCompraVenta'];//1-venta 2-compra
+        $usuario_carga = $_POST['id_usuario'];
 
         $query = mysqli_query($conexion,"SELECT cantidad, idProducto, preUnitario FROM detalle_novedad WHERE ventaCompra ='$tipoCompraVenta'");
 
@@ -290,15 +301,17 @@
         }
         $total = $totalNeto + $iva;
         if ($tabla_cant[0] > 0 ){
-          $num_factura = ulti_factura($tipoCompraVenta, $tipo_factura);
+          $num_factura = ulti_factura($tipoCompraVenta, $tipo_factura);// saco el ultimo numero de la factura
 
           $total = $total - $descuento;
           //el descuento lo hice general y no por producto kbe el chori
           //por ahora agrego 0 al iva, y compro como cons final
-          mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, bonificacion, tipoCompraVenta)
-          VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$descuento', '$tipoCompraVenta')");//1-venta 2-compra
+          mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, bonificacion, tipoCompraVenta, usuario_carga)
+          VALUES('$tipo_factura','1','$num_factura','$fecha','$cliente','$formapago','$totalNeto','$iva','$total','$descuento', '$tipoCompraVenta', '$usuario_carga')");//1-venta 2-compra
 
           $idFactura = idFactura($tipo_factura,$num_factura, $tipoCompraVenta);
+
+
 
           for ($i=0; $i < sizeof($tabla_id); $i++) {
             if ($tabla_id[$i] > 0){
@@ -324,8 +337,13 @@
 
           }
           descuentoInsumo($cantResta,$arrayId_insumo);
-          echo $num_factura;
+
+          eliminarDetalleNovedad($tipoCompraVenta);
+
+          echo $echo .=rellegarCero(1,4)."-".rellegarCero($num_factura,8);
+
         }else {
+
           echo 0;
         };
         break;
@@ -541,7 +559,10 @@
               </tr>";
     return $tabla;
   }
-
+  function eliminarDetalleNovedad($tipo){
+    include ('conexion.php');
+    mysqli_query($conexion, "DELETE FROM detalle_novedad WHERE ventaCompra = $tipo");
+  }
 
 
 $conexion -> close();

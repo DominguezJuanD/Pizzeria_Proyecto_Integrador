@@ -16,7 +16,7 @@
       <meta charset="UTF8">
 			<link rel="stylesheet"  href="../css/Menu2.css">
   </head>
-<body>
+<body onload="borrar(1);">
   <section id="venta">
   	<div style="margin-left: 10%; margin-right:10%">
 
@@ -59,23 +59,23 @@
 			                      <?php
 			                      $query = $conexion -> query ("SELECT * FROM persona ");
 			                      while ($provedor = mysqli_fetch_array($query)) {
-			                        echo '<option value="'.$provedor[0].'" direc="'.$provedor[3].'" tel="'.$provedor[4].'" >'.$provedor[1].'</option>';
+			                        echo '<option value="'.$provedor['id_persona'].'" direc="'.$provedor['direccion'].'" tel="'.$provedor['telefono'].'" >'.$provedor['nombre'].'</option>';
 			                      }
 			                      ?>
 			                    </select>
 												</td>
 												<td>
 													<b>ID Cliente:</b>
-			                    <input type="text" id="id_cliente" size="1">
+			                    <input type="text" id="id_cliente" size="1" placeholder="00" readonly="readonly">
 												</td>
 
 												<td >
 			                    <b>Direccion: </b>
-			                    <input type="text" id="direccion" value="alla">
+			                    <input type="text" id="direccion" placeholder="calle 123..." readonly="readonly">
 												</td>
 												<td>
 			                    <b>Telefono: </b>
-			                    <input type="text" id="telefono" value="123" size="10">
+			                    <input type="text" id="telefono"  size="10" placeholder="123-123456" readonly="readonly">
 												</td>
 												</tr>
 
@@ -85,7 +85,7 @@
 															<br>
 					                    <b>Forma de pago:</b>
 
-					                    <select name="formapago">
+					                    <select name="formapago" id="formapago">
 					                      <option value="0">forma de pago :</option>
 					                      <?php
 					                      $query = $conexion -> query ("SELECT * FROM FormaPago");

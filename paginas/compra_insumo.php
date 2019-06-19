@@ -14,17 +14,8 @@
       <!-- <link rel="shortcut icon" href="icono.ico"> -->
       <title>Compra de Insumos </title>
       <meta charset="UTF8">
-      <!-- <style>
-      body{
-        background: url(fondo3.jpg) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-      }
-      </style> -->
   </head>
-<body>
+<body onload="borrar(2);">
   <section id="compra">
   	<div style="margin-left: 10%; margin-right:10%">
   	  <table style="width:100%">
@@ -100,7 +91,7 @@
   								<tr>
   									<td><b>Forma de pago</b></td>
                     <td>
-                    <select name="formapago">
+                    <select name="formapago" id="formapago">
                       <option value="0">forma de pago:</option>
                       <?php
                       $query = $conexion -> query ("SELECT * FROM FormaPago");

@@ -9,7 +9,7 @@ var sumaPrecios = [];
 var tabla_id = [];
 var tipo=0;
 var num_id = [];
-var arrayprueba = [];
+// var iva = TRUE;
 var  id_fila;
 var NumeroFactura;
 //__________________//
@@ -83,7 +83,9 @@ $('#clientes').change(function(){// esto rellena todos los campos de cliente
 $('#tipo_factura').change(function(){
 	if ($('#tipo_factura').val() == 'A') {
 		$('#triva').show();
+		// iva = TRUE;
 	}else{
+		// iva=FALSE;
 		$('#triva').hide();
 		$('#ivaC').val(0);
 	}
@@ -103,7 +105,6 @@ function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamic
 		// $('#productos').load(' #productos');
 		if (id_prod>0 && cantidad>0){
 			var data_form = $("#formulario").serialize();
-			console.log("and");
 			$.ajax({
 				url:'../php/consultas.php',
 				type:'POST',
@@ -122,7 +123,7 @@ function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamic
 				// console.log(resp.tabla_id);
 			});
 		}else {
-			alert("Ingrese un insumo o valor");
+			alertify.error("Ingrese un insumo o valor");
 		}
 }
 
@@ -145,59 +146,70 @@ function eliminarFila(nfila){
 
 
 function factura_venta_producto(tipo){//tipo = (1-venta 2-compra)
-
-	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
-	// console.log(tabla_cant);
-	console.log(tipo);
-	if (statusConfirm == true){
-		var data_form = $("#formulario").serialize()
-		console.log(data_form)
-		$.ajax({
-			url:'../php/consultas.php',
-			type:'POST',
-			data: 'Boton=factura_venta_producto&'+data_form+'&tipoCompraVenta='+tipo,
-			dataType: 'json',
-		}).done(function(resp){
-			console.log(resp);
-			if(resp > 0){
-				alert("ok");
-				location.href='nuevaVenta.php';
-			}else {
-				if(resp == 0){
-					alert("debe rellenar los cambos");
-
-				};
+ 	if ($('#formapago').val() != 0) {
+		if ($('#clientes').val() != 0) {
+			var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
+			// console.log(tabla_cant);
+			console.log(tipo);
+			if (statusConfirm == true){
+				var data_form = $("#formulario").serialize()
+				console.log(data_form)
+				$.ajax({
+					url:'../php/consultas.php',
+					type:'POST',
+					data: 'Boton=factura_venta_producto&'+data_form+'&tipoCompraVenta='+tipo,
+				}).done(function(resp){
+					console.log(resp);
+					if(resp != 0){
+						alert(" FC: "+resp);
+						location.href='nuevaVenta.php';
+					}else {
+						alertify.error("Agregar almenos un Producto!!!");
+					};
+				});
 			};
-		});
-	};
+		}else {
+			alertify.error("Elija un Cliente");
+		}
+ 	}else {
+ 		alertify.error("Elija forma de pago");
+ 	}
+
 }
 
 //================================funciones para factura compra==================
 
 function factura_compra_insumo(tipo){//tipo = (1-venta 2-compra)
-
-	var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
-	if (statusConfirm == true){
-		var data_form = $("#formulario").serialize()
-		console.log(data_form)
-		console.log(tipo);
-		$.ajax({
-			url:'../php/consultas.php',
-			type:'POST',
-			data: 'Boton=factura_compra_insumo&'+data_form+'&tipoCompraVenta='+tipo,
-			dataType: 'json',
-		}).done(function(resp){
-			console.log(resp);
-			if(resp > 0){
-				alert("ok");
-				location.href='compra_insumo.php';
-			}else {
-				if(resp == 0){
-					alert("debe rellenar los cambos");
+	if ($('#formapago').val() != 0) {
+		if ($('#provedor').val() != 0) {
+				var statusConfirm = confirm("¿Son Correctos los datos Ingresados?");
+				if (statusConfirm == true){
+					var data_form = $("#formulario").serialize()
+					console.log(data_form)
+					console.log(tipo);
+					$.ajax({
+						url:'../php/consultas.php',
+						type:'POST',
+						data: 'Boton=factura_compra_insumo&'+data_form+'&tipoCompraVenta='+tipo,
+						dataType: 'json',
+					}).done(function(resp){
+						console.log(resp);
+						if(resp > 0){
+							alert("ok");
+							location.href='compra_insumo.php';
+						}else {
+							if(resp == 0){
+								alertify.error("Agregar almenos un Producto!!!");
+							};
+						};
+					});
 				};
-			};
-		});
-	};
+			}else {
+				alertify.error("Elija un Cliente");
+			}
+		}else {
+			alertify.error("Elija forma de pago");
+		}
 }
 
 //=================================================== Busqueda de factura ==================================================================================
@@ -299,7 +311,7 @@ function desdeHasta(){
 		dataType: 'json',
 	}).done(function(resp){
 
-		console.log(resp.tabla);
+		// console.log(resp.tabla);
 		$("#saldo").text(resp.saldoAnterior);
 		if (resp.tipo == "0") {
 			$("#tabla_doble").show();
@@ -327,21 +339,19 @@ function desdeHasta(){
 			}
 
 		}
-
-
-		// $('#totalneto').val(resp.totalneto);
-		// $('#iva').val(resp.iva);
-		// $('#total').val(resp.total);
-		//
-		// $('#totalnetoC').val(resp.totalnetoC);
-		// $('#totalC').val(resp.totalC);
 	});
-
-
 }
 
 
-
+function borrar(tipo){
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=borrar&tipoCompraVenta='+tipo
+	}).done(function(data){
+		console.log(data);
+	})
+}
 
 
 

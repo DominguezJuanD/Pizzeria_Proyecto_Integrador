@@ -21,9 +21,9 @@
             </select>
 
             <b>Desde</b>
-            <input type="date" name="desde" id="desde"></input>
+            <input type="date" name="desde" id="desde" value="<?php echo date('Y-m-d',time());?>"></input>
             <b>Hasta</b>
-            <input type="date" name="hasta" id="hasta"></input>
+            <input type="date" name="hasta" id="hasta" value="<?php echo date('Y-m-d',time());?>"></input>
 
             <input class="btn btn-primary" role="button" type="button" value="Buscar Factura" onclick="desdeHasta();" />
 
