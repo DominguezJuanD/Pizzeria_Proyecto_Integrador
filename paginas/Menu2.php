@@ -73,9 +73,11 @@ if (!isset($_SESSION['Id'])) {
 
                   <ul>
 
-                    <a href="buscarFacturas.php" id="mostrar-compras"> Num. Factura </a>
-                    <a href="desdeHastaFactura.php" id="mostrar-compras"> Fac. Desde-Hasta </a>
+                    <a href="buscarFacturas.php" > Num. Factura </a>
 
+                    <a href="desdeHastaFactura.php"> Fac. Desde-Hasta </a>
+
+                    <a href="clienteProductoFactura.php"> Cliente - Producto </a>
                   </ul>
 
               </li>

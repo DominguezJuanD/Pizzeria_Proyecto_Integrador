@@ -119,20 +119,23 @@
                   <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=2' target='_blank'>Detalle</a></td></tr>";
                   $total_compra+=$fila['total'];
                   }
-                  if($total){
-                    $compra.= relleno($total_compra);
-                  }
-                  if ($tipoComp == '1') {
-                    $tabla['tabla'] = $venta;
-                  }elseif ($tipoComp == '2') {
-                    $tabla['tabla'] = $compra;
-                  }else {
-                    $tabla['tabla'] = $venta;
-                    $tabla['tabla2'] = $compra;
-                  }
-                  $tabla['tipo'] = $tipoComp;
+        $tabla['saldoTotal'] = $total + $total_compra;
 
-                  echo json_encode($tabla);
+        if($total){
+          $compra.= relleno($total_compra);
+        }
+        if ($tipoComp == '1') {
+          $tabla['tabla'] = $venta;
+        }elseif ($tipoComp == '2') {
+          $tabla['tabla'] = $compra;
+        }else {
+          $tabla['tabla'] = $venta;
+          $tabla['tabla2'] = $compra;
+        }
+
+        $tabla['tipo'] = $tipoComp;
+
+        echo json_encode($tabla);
       break;
 
 
@@ -556,8 +559,8 @@
               <td style='width:5%'></td>
               <td style='width:10%'></td>
               <td style='width:10%'></td>
-              <td style='width:10%'>Total</td>
-              <td style='width:10%'>". $total."</td>
+              <td style='width:10%'><b>TOTAL</b></td>
+              <td style='width:10%'><b>".$total."</b></td>
               <td style='width:5%'>----</td>
               </tr>";
     return $tabla;

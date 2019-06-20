@@ -1,6 +1,6 @@
 //variables JS//
-var total =0;
-var totalneto=0;
+var f = new Date();
+var fecha= date_format(f,"Y/m/d");
 var precioTotal =0;
 var iva = 0;
 var id_tipo = 0;
@@ -212,7 +212,7 @@ function factura_compra_insumo(tipo){//tipo = (1-venta 2-compra)
 		}
 }
 
-//=================================================== Busqueda de factura ==================================================================================
+//=================================================== Busqueda de factura por numero ==================================================================================
 
 function buscarFacturas(){
 	var formBusqueda = $('#formBusqueda').serialize();
@@ -282,23 +282,19 @@ $('#tipofactura2').change(function(){
 	$('#listas1').html("");
 
 	if ($('#tipofactura2').val() == '0') {
-
 		$("#tabla_sola").hide();
 		$("#tabla_doble").show();
 	}else {
+		if ($('#tipofactura2').val() =='1') {
+			$('#tituloFactura').text("Fac. Venta");
+		}else{
+			$('#tituloFactura').text("Fac. Compra");
+		}
 		$("#tabla_sola").show();
 		$("#tabla_doble").hide();
 	}
 });
 
-// $('#tipo_factura').change(function(){
-// 	if ($('#tipo_factura').val() == 'A') {
-// 		$('#triva').show();
-// 	}else{
-// 		$('#triva').hide();
-// 		$('#ivaC').val(0);
-// 	}
-// });
 
 
 function desdeHasta(){
@@ -314,6 +310,7 @@ function desdeHasta(){
 
 		// console.log(resp.tabla);
 		$("#saldo").text(resp.saldoAnterior);
+		$('#saldoTotal').text(resp.saldoTotal);
 		if (resp.tipo == "0") {
 			$("#tabla_doble").show();
 			if (resp.tabla || resp.tabla2) {
@@ -343,7 +340,29 @@ function desdeHasta(){
 	});
 }
 
+$('#desde').change(function(){
+	if ($('#desde').val() > $('#hasta').val()) {
+		$('#buscar').attr("disabled", true);
+		alertify.error("ERORR!! fecha DESDE no puede ser mayor a fecha HASTA");
+	}else{
+		$('#buscar').attr("disabled", false);
+	}
+});
+$('#hasta').change(function(){
+	console.log(f);
+	if ($('#hasta').val() < $('#desde').val()) {
+		$('#buscar').attr("disabled", true);
+		alertify.error("ERORR!! fecha HASTA no puede ser menor a fecha DESDE");
+	}else if ($('#hasta').val() > f ){
+		$('#buscar').attr("disabled", false);
+		alertify.error("ERORR!! fecha HASTA no puede ser mayor a HOY");
+	}else {
+		$('#buscar').attr("disabled", false);
+	}
 
+});
+
+// =============================================================================borra la tabla novedad ====================================
 function borrar(tipo){
 	$.ajax({
 		url:'../php/consultas.php',
@@ -353,6 +372,8 @@ function borrar(tipo){
 		console.log(data);
 	})
 }
+
+
 
 
 
