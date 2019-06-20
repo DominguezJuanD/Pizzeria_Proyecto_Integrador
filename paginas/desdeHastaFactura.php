@@ -30,7 +30,8 @@
           <br>
 
           <br>
-					<span><b>Saldo Anterrior:</b><b id="saldo" value="0"></b> </span>
+					<span><b>Saldo Anterrior: $</b><b id="saldo" value="0"></b></span>
+					<span  style="float: right" ><b>Saldo Total: $</b><b id="saldo" value="0"></b></span>
 					<br>
 					<br>
           <div id="tabla_doble" >

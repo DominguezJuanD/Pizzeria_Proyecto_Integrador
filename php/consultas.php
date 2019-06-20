@@ -83,7 +83,8 @@
                                           ORDER BY ef.fechaComprob ASC");
 
                 while( $fila = $result_venta -> fetch_assoc()){
-                  $venta.="
+
+                  $venta .="
                   <tr bgcolor='white'>
                   <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
                   <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
@@ -91,10 +92,12 @@
                   <td style='width:10%'>".$fila['fecha']."</td>
                   <td style='width:10%'>".$fila['total']."</td>
                   <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=1' target='_blank'>Detalle</a></td></tr>";
+                  // $venta.= relleno($total_compra);
                   $total+=$fila['total'];
                   }
-                  if (sizeof($fila)) {
-                    $venta .= relleno($total);
+
+                  if ($total) {
+                    $venta.= relleno($total);
                   }
 
 
@@ -116,8 +119,8 @@
                   <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=2' target='_blank'>Detalle</a></td></tr>";
                   $total_compra+=$fila['total'];
                   }
-                  if(sizeof($fila)){
-                    $compra .= relleno($total_compra);
+                  if($total){
+                    $compra.= relleno($total_compra);
                   }
                   if ($tipoComp == '1') {
                     $tabla['tabla'] = $venta;
@@ -549,12 +552,12 @@
   }
 
   function relleno($total){
-    $tabla.="<tr>
-              <td style='width:5%'> </td>
-              <td style='width:10%'> </td>
-              <td style='width:10%'> </td>
+    $tabla="<tr>
+              <td style='width:5%'></td>
+              <td style='width:10%'></td>
+              <td style='width:10%'></td>
               <td style='width:10%'>Total</td>
-              <td style='width:10%'>".$total."</td>
+              <td style='width:10%'>". $total."</td>
               <td style='width:5%'>----</td>
               </tr>";
     return $tabla;

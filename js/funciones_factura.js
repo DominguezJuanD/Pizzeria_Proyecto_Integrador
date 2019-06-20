@@ -276,6 +276,7 @@ function ponerCeros(obj, lon) {
 // ==========================================factura desde hasta =========================================
 
 $('#tipofactura2').change(function(){
+	$('#saldo').html(0);
 	$('#listasSola').html("");
 	$('#listas').html("");
 	$('#listas1').html("");
