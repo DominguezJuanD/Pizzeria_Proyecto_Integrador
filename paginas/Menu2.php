@@ -91,6 +91,7 @@ if (!isset($_SESSION['Id'])) {
         </nav><!-- Aqui estamos cerrando la nueva etiqueta nav -->
       </div>
     </div>
+    <input type="date" id="ffecha" style="display:none" value="<?php echo date('Y-m-d',time());?>"/> <!-- de aca saco la fecha para comprar -->
     <div class="contenido"></div>
     <span class="usuario"><b>Bienvenido: <? echo $_SESSION['Nombre']?>[<?echo $_SESSION['Id']?>]</b></span>
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->

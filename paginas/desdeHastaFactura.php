@@ -1,6 +1,4 @@
 <?php
-
-
 	include("Menu2.php");
 ?>
 

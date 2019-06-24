@@ -3,20 +3,30 @@
 
 	include("Menu2.php");
 ?>
-<body>
+<body onload="cargaSelect();">
   <form id="formBusqueda">
 
 
         <div style="margin-left: 10%; margin-right:10%">
           <h4  align= "center">Buscar Facturas</h4>
 
-          <b>Tipo Factura</b>
+					<b>Cliente: </b>
+					<select name="cliente" id="cliente"></select>
 
+					<b>Producto: </b>
+					<select name="producto" id="producto">
+						<option value="0">Todos</option>
+					</select>
+					<br>
 
-            <select name="tipofactura" id="tipofactura2">
-              <option value="0">Todo</option>
-              <option value="1">Venta</option>
-              <option value="2">Compra</option>
+          <b>Tipo Comprobante</b>
+
+            <select name="tipocomprob" id="tipofactura2">
+              <option value="Z">Todo</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+							<option value="C">C</option>
+							<option value="X">X</option>
             </select>
 
             <b>Desde</b>
@@ -24,7 +34,7 @@
             <b>Hasta</b>
             <input type="date" name="hasta" id="hasta" value="<?php echo date('Y-m-d',time());?>"></input>
 
-            <input class="btn btn-primary" role="button" type="button" value="Buscar Factura" onclick="desdeHasta();"  />
+            <input class="btn btn-primary" role="button" type="button" value="Buscar Factura" onclick="clienteProveedor();" id="buscar"  />
 
           <br>
 

@@ -1,6 +1,7 @@
 //variables JS//
 var f = new Date();
-var fecha= date_format(f,"Y/m/d");
+var ff = f.getFullYear() + "-" + (f.getMonth() +1) + "-" + f.getDate();
+var fecha = Date();
 var precioTotal =0;
 var iva = 0;
 var id_tipo = 0;
@@ -12,6 +13,7 @@ var num_id = [];
 // var iva = TRUE;
 var  id_fila;
 var NumeroFactura;
+console.log(ff);
 //__________________//
 
 
@@ -91,6 +93,7 @@ $('#tipo_factura').change(function(){
 	}
 });
 
+// =======================================================================agrega los productos a las facturas ==============================
 function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamica//tipo = (1-venta 2-compra)
 		id_tipo = tipo;
 		var id_prod = $('#id_prod').val();
@@ -127,6 +130,8 @@ function agregar_producto(tipo) {// esto agrega los productos a la tabla dinamic
 		}
 }
 
+
+// ============================================================elimina filas en de las productos en las facturas ======================================
 function eliminarFila(nfila){
 	$.ajax({
 		url:'../php/consultas.php',
@@ -144,6 +149,7 @@ function eliminarFila(nfila){
 	});
 }
 
+// ========================================facturas ventas =============================================================================
 
 function factura_venta_producto(tipo){//tipo = (1-venta 2-compra)
  	if ($('#formapago').val() != 0) {
@@ -234,6 +240,8 @@ function buscarFacturas(){
 	});
 }
 
+
+// =========================================================detalle de facturas =====================================
 function detalleFactura(id,tipo){
 	console.log(tipo);
  console.log(id);
@@ -266,6 +274,7 @@ function detalleFactura(id,tipo){
 	});
 }
 
+// =======================================================esta gilada rellena de ceros==================
 function ponerCeros(obj, lon) {
   while (obj.length < lon)
     obj = '0'+obj;
@@ -339,7 +348,47 @@ function desdeHasta(){
 		}
 	});
 }
+// ============================================================== facturas cliente proctos ================================================
 
+function clienteProveedor(){
+	var formBusqueda = $('#formBusqueda').serialize();
+	console.log(formBusqueda);
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=clienteProducto&'+formBusqueda,
+		dataType: 'json',
+	}).done(function(resp){
+		console.log(resp.w);
+		console.log(resp.saldoAnterior);
+		console.log(resp.tabla);
+			$('#listasSola').html(resp.tabla);
+			$('#saldo').text(resp.saldoAnterior);
+	});
+
+}
+// =================================================================carga los select con datos de la bd=========================================
+function cargaSelect(){
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=cargaClienteProducto&',
+		dataType: 'json',
+	}).done(function(resp){
+
+		console.log(resp);
+		$(resp.clientes).each(function(key, registro) {
+			$("#cliente").append('<option value="'+registro.id_persona+'">'+registro.nombre+'</option>');
+		});
+		$(resp.productos).each(function(key, registro) {
+			$("#producto").append('<option value="'+registro.id_producto+'">'+registro.descripcion+'</option>');
+		});
+	});
+
+}
+
+
+// =========================================================== control de la fecha en las busquedas ====================================
 $('#desde').change(function(){
 	if ($('#desde').val() > $('#hasta').val()) {
 		$('#buscar').attr("disabled", true);
@@ -349,12 +398,13 @@ $('#desde').change(function(){
 	}
 });
 $('#hasta').change(function(){
-	console.log(f);
+	// console.log($('#hasta').val());
+	// console.log($('#ffecha').val());
 	if ($('#hasta').val() < $('#desde').val()) {
 		$('#buscar').attr("disabled", true);
 		alertify.error("ERORR!! fecha HASTA no puede ser menor a fecha DESDE");
-	}else if ($('#hasta').val() > f ){
-		$('#buscar').attr("disabled", false);
+	}else if ($('#hasta').val() > $('#ffecha').val()){
+		$('#buscar').attr("disabled", true);
 		alertify.error("ERORR!! fecha HASTA no puede ser mayor a HOY");
 	}else {
 		$('#buscar').attr("disabled", false);
@@ -372,12 +422,6 @@ function borrar(tipo){
 		console.log(data);
 	})
 }
-
-
-
-
-
-
 
 
 

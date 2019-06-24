@@ -1,6 +1,8 @@
 <?php
   include("conexion.php");
-  $boton = $_POST['Boton'];
+  // $boton = $_POST['Boton'];
+  // $boton = $_GET['Boton'];
+  $boton = $_REQUEST['Boton'];
   session_start();
   switch($boton){
 
@@ -33,6 +35,21 @@
   case 'logout':
       session_destroy();
       echo TRUE;
+    break;
+
+    case 'cargaClienteProducto':
+
+      $result_cliente = mysqli_query($conexion,"SELECT id_persona, nombre FROM persona WHERE baja_logica = '1' and id_tipo_persona = '2'");
+              while( $clientes = $result_cliente -> fetch_assoc()){
+                  $datos_cliente[] = $clientes;
+              }
+      $result_producto = mysqli_query($conexion,"SELECT id_producto, descripcion FROM productos WHERE baja_logica = '1'");
+              while( $productos = $result_producto -> fetch_assoc()){
+                  $datos_producto[] = $productos;
+              }
+              $datos['clientes'] = $datos_cliente;
+              $datos['productos'] = $datos_producto;
+              echo json_encode($datos);
     break;
 //=================================================busqueda de facturas ======================================================
     case 'buscarFacturas': // por nuemro de factura
@@ -137,6 +154,72 @@
 
         echo json_encode($tabla);
       break;
+
+// ==================================================================== factura cliente producto =====================================================
+
+      case 'clienteProducto':
+          $tipoComb = $_POST['tipocomprob'];
+          $cliente = $_POST['cliente'];
+          $producto = $_POST['producto'];
+          $desde = $_POST['desde'];
+          $hasta = $_POST['hasta'];
+          $desde = $desde." 00:00:00";
+          $hasta = $hasta." 23:59:59";
+          $tabla = array();
+          $quey =mysqli_query($conexion,"SELECT sum(total) as total FROM encabezadofactura where fechaComprob < '$desde' and idCliente = '$cliente'");
+          $saldoAnterior=mysqli_fetch_array($quey);
+          $tabla['saldoAnterior'] = $saldoAnterior['total'];
+
+          if ($producto > 0 && $tipoComb != "Z") {
+            $where = "AND ef.tipComprob = '$tipoComb' and dt.id_producto = '$producto' ORDER BY ef.fechaComprob ASC";
+          }elseif ($producto == 0 && $tipoComb != "Z") {
+            $where = "AND ef.tipComprob = '$tipoComb' ORDER BY ef.fechaComprob ASC";
+          }elseif ($producto > 0 && $tipoComb == "Z") {
+            $where = "AND dt.id_producto= '$producto' order by ef.fechaComprob asc";
+          }else {
+            $where = "GROUP BY ef.numComprob ORDER BY ef.fechaComprob ASC";
+          }
+          $tabla['w'] = $where;
+          $result = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*, ef.numComprob
+                                            FROM encabezadofactura as ef
+                                            INNER JOIN detallefactura as dt ON ef.idFactura = dt.idFactura
+                                            WHERE ef.tipoCompraVenta = '1'
+                                            and ef.idCliente = '$cliente'
+                                            and ef.fechaComprob between '$desde' and '$hasta' $where");
+
+                                            // SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.* FROM encabezadofactura as ef
+                                            // INNER JOIN detallefactura as dt ON ef.idFactura = dt.idFactura WHERE ef.tipoCompraVenta = '1' and idCliente = '4' AND dt.id_producto = '2'
+                                            // and ef.fechaComprob between '2015-01-01 00:00:00' and '2019-06-22 23:59:59' ORDER BY ef.fechaComprob ASC
+
+                                            // productos todos comprobate todos Y
+                                            // producto todos comprobate algo
+                                            // producto algo comprobate todos Y
+                                            // producto algo comprobate algo
+
+                  while( $fila = $result -> fetch_assoc()){
+
+                    $salida .="
+                    <tr bgcolor='white'>
+                    <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
+                    <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+                    <td style='width:10%'>".$fila['usuario_carga']."</td>
+                    <td style='width:10%'>".$fila['fecha']."</td>
+                    <td style='width:10%'>".$fila['total']."</td>
+                    <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=1' target='_blank'>Detalle</a></td></tr>";
+                    // $venta.= relleno($total_compra);
+                    $total+=$fila['total'];
+                    }
+
+                    if ($total) {
+                      $salida.= relleno($total);
+                    }
+                    // $tabla['c'] = "jaja";
+
+                    $tabla['tabla'] = $salida;
+
+                    echo json_encode($tabla);
+
+        break;
 
 
 //=======================================================detalle de facturas ===============================================
