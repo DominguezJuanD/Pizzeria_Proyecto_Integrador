@@ -293,6 +293,54 @@
         break;
 
 
+      case 'caja_desde_hasta':
+          $desde = $_POST['desde'];
+          $hasta = $_POST['hasta'];
+          $desde = $desde." 00:00:00";
+          $hasta = $hasta." 23:59:59";
+
+          $query = mysqli_query($conexion,"SELECT date_format(ie.fecha,'%d/%m/%Y %H:%i:%s') as fecha, ie.*
+                                            FROM iedinero as ie
+                                            WHERE ie.tipo ='1'
+                                            and ie.fecha between '$desde' and '$hasta'");
+
+          while($fila = $query -> fetch_assoc()){
+            $salida .="
+            <tr bgcolor='white'>
+            <td style='width:5%'> Mov: ".$fila['numMov']."</td>
+            <td style='width:10%'>".$fila['usuario_carga']."</td>
+            <td style='width:10%'>".$fila['fecha']."</td>
+            <td style='width:10%'>".$fila['importe']."</td>
+            <td style='width:20%'>".$fila['concepto']."</td></tr>";
+            // $venta.= relleno($total_compra);
+            // $total+=$fila['total'];
+         	}
+
+          $query1 = mysqli_query($conexion,"SELECT date_format(ie.fecha,'%d/%m/%Y %H:%i:%s') as fecha, ie.*
+                                            FROM iedinero as ie
+                                            WHERE ie.tipo ='2'
+                                            and ie.fecha between '$desde' and '$hasta'");
+
+          while($fila1 = $query1 -> fetch_assoc()){
+            $salida1 .="
+            <tr bgcolor='white'>
+            <td style='width:5%'> Mov: ".$fila1['numMov']."</td>
+            <td style='width:10%'>".$fila1['usuario_carga']."</td>
+            <td style='width:10%'>".$fila1['fecha']."</td>
+            <td style='width:10%'>".$fila1['importe']."</td>
+            <td style='width:20%'>".$fila1['concepto']."</td></tr>";
+            // $venta.= relleno($total_compra);
+            // $total+=$fila['total'];
+          }
+
+          $array['tabla'] = $salida;
+          $array['tabla1'] = $salida1;
+          echo json_encode($array);
+
+
+      break;
+
+
 // ========================================guardar factura tipo compra insumo ======================================================
     case 'factura_compra_insumo':
 

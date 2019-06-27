@@ -15,8 +15,7 @@ var NumeroFactura;
 
 
 
-function limpiar()
-{
+function limpiar(){
 	$("#formulario [type='text']").val("");//limpiar formulario (todos los  type="text")
 	$("#formulario [type='number']").val(0);//loimpiar select de los formulario
 	$("#formulario [name='provedor']").val(0);
@@ -93,10 +92,19 @@ $('#tipo_factura').change(function(){
 	}
 });
 
-$("#observacion").keyup(function() {
+$("#observacion").keyup(function descuento() {
 	var cant1 = cant - $('#observacion').val().length;
-	console.log("sad");
-	$('#cant').text(cant1);
+if (cant1 >= 0) {
+	$('#extraer').attr("disabled", false);
+	$('#ingreso').attr("disabled", false);
+	$('#cant').text(cant1 +"/140");
+	$('#cant').css({"color":"black"});
+}else {
+	$('#extraer').attr("disabled", true);
+	$('#ingreso').attr("disabled", true);
+	$('#cant').css({"color":"red"});
+}
+
 });
 
 // =======================================================================agrega los productos a las facturas ==============================
@@ -354,6 +362,31 @@ function desdeHasta(){
 		}
 	});
 }
+
+// ===============================================================caja desde hasta =======================================================
+
+function desdeHastaCaja(){
+	var formBusqueda = $("#formBusqueda").serialize();
+	console.log(formBusqueda);
+
+
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=caja_desde_hasta&'+formBusqueda,
+		dataType: 'json',
+	}).done(function(resp){
+			console.log(resp.tabla);
+			$('#listas').html(resp.tabla);
+			$('#listas1').html(resp.tabla1);
+	});
+
+
+
+}
+
+
+
 // ============================================================== facturas cliente proctos ================================================
 
 function clienteProveedor(){
