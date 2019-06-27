@@ -271,26 +271,26 @@
 
 
       break;
+// =====================================================ingreso y egreso de caja================================
+    case 'ingreso_dinero':
+      $fecha = date('Y/m/d H:i:s',time());
+      // $ff= explode("/",$fecha);
+      $dinero = $_POST['dinero'];
+      $justificar = $_POST['justificar'];
+      $usuario = $_SESSION['Id'];
+      mysqli_query($conexion, "INSERT INTO iedinero(importe, tipo, concepto, fecha, usuario_carga) VALUES('$dinero','1','$justificar','$fecha','$usuario')");
+      echo 'OK';
+      break;
 
-    // case 'ingreso_dinero':
-    //   $fecha = $_POST['fecha'];
-    //   $ff= explode("/",$fecha);
-    //   $dinero = $_POST['dinero'];
-    //   $observacion = $_POST['observacion'];
-    //   mysqli_query($conexion, "INSERT INTO IEDinero(numMov, importe, tipo, concepto, fecha) VALUES(NULL,'$dinero','1','$observacion','".$ff[0]."-".$ff[1]."-".$ff[2]."');")  or
-    //    die("Problemas en:".mysqli_error($conexion));
-    //   echo "ok";
-    //   break;
-    //
-    // case 'egreso_dinero':
-    //   $fecha = $_POST['fecha'];
-    //   $ff= explode("/",$fecha);
-    //   $dinero = $_POST['dinero'];
-    //   $observacion = $_POST['observacion'];
-    //   mysqli_query($conexion, "INSERT INTO IEDinero(numMov, importe, tipo, concepto, fecha) VALUES(NULL,'$dinero','2','$observacion','".$ff[0]."-".$ff[1]."-".$ff[2]."');")  or
-    //    die("Problemas en:".mysqli_error($conexion));
-    //   echo "ok";
-    //   break;
+      case 'egreso_dinero':
+        $fecha = date('Y/m/d H:i:s',time());
+        // $ff= explode("/",$fecha);
+        $dinero = $_POST['dinero'];
+        $justificar = $_POST['justificar'];
+        $usuario = $_SESSION['Id'];
+        mysqli_query($conexion, "INSERT INTO iedinero(importe, tipo, concepto, fecha, usuario_carga) VALUES('$dinero','2','$justificar','$fecha','$usuario')");
+        echo $dinero;
+        break;
 
 
 // ========================================guardar factura tipo compra insumo ======================================================

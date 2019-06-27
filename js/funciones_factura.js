@@ -1,19 +1,15 @@
 //variables JS//
-var f = new Date();
-var ff = f.getFullYear() + "-" + (f.getMonth() +1) + "-" + f.getDate();
-var fecha = Date();
 var precioTotal =0;
 var iva = 0;
 var id_tipo = 0;
 var sumaArray = [];
 var sumaPrecios = [];
-var tabla_id = [];
+var cant = 140;
 var tipo=0;
 var num_id = [];
 // var iva = TRUE;
 var  id_fila;
 var NumeroFactura;
-console.log(ff);
 //__________________//
 
 
@@ -26,18 +22,23 @@ function limpiar()
 	$("#formulario [name='provedor']").val(0);
 	$("#formulario [name='tipofactura']").val(0);
 	$("#formulario [name='formapago']").val(0);
+	$("#observacion").val("");
+	$("#dinero").val(0);
+	// console.log("asdasd");
 	$("#id_prod").val(0);
 }
 
 function ingreso_dinero(){
 	var dinero = $('#dinero').val();
-	var observacion = $('#observacion').val();
-	var fecha = $('#fecha').val();
-	if (dinero>0){
+	var justificar = $('#observacion').val();
+	// var fecha = $('#fecha').val();
+	console.log(dinero);
+	console.log(justificar);
+	if ($('#dinero').val() > 0){
 		$.ajax({
-			url:'/php/consultas.php',
+			url:'../php/consultas.php',
 			type:'POST',
-			data: 'dinero='+dinero+'&observacion='+observacion+'&fecha='+fecha+'&Boton=ingreso_dinero'
+			data: 'dinero='+dinero+'&justificar='+justificar+'&Boton=ingreso_dinero'
 		}).done(function(data){
 			alert(data);
 			limpiar();
@@ -46,16 +47,18 @@ function ingreso_dinero(){
 		alert("ingreso es cero");
 	}
 }
+
+
 function extraer_dinero()
 {
 	var dinero = $('#dinero').val();
-	var observacion = $('#observacion').val();
-	var fecha = $('#fecha').val();
-	if (dinero>0){
+	var justificar = $('#observacion').val();
+	// var fecha = $('#fecha').val();
+	if ($('#dinero').val() > 0){
 		$.ajax({
-			url:'/php/consultas.php',
+			url:'../php/consultas.php',
 			type:'POST',
-			data: 'dinero='+dinero+'&observacion='+observacion+'&fecha='+fecha+'&Boton=egreso_dinero'
+			data: 'dinero='+dinero+'&justificar='+justificar+'&Boton=egreso_dinero'
 		}).done(function(data){
 			alert(data);
 			limpiar();
@@ -64,9 +67,6 @@ function extraer_dinero()
 		alert("ingreso es cero");
 	}
 }
-
-
-
 
 
 //===================================funciones para factura Venta========================
@@ -91,6 +91,12 @@ $('#tipo_factura').change(function(){
 		$('#triva').hide();
 		$('#ivaC').val(0);
 	}
+});
+
+$("#observacion").keyup(function() {
+	var cant1 = cant - $('#observacion').val().length;
+	console.log("sad");
+	$('#cant').text(cant1);
 });
 
 // =======================================================================agrega los productos a las facturas ==============================
@@ -352,18 +358,22 @@ function desdeHasta(){
 
 function clienteProveedor(){
 	var formBusqueda = $('#formBusqueda').serialize();
-	console.log(formBusqueda);
+	// console.log(formBusqueda);
 	$.ajax({
 		url:'../php/consultas.php',
 		type:'POST',
 		data: 'Boton=clienteProducto&'+formBusqueda,
 		dataType: 'json',
 	}).done(function(resp){
-		console.log(resp.w);
-		console.log(resp.saldoAnterior);
-		console.log(resp.tabla);
-			$('#listasSola').html(resp.tabla);
-			$('#saldo').text(resp.saldoAnterior);
+		if (resp.tabla == null) {
+			alertify.error("No se Encontraron Faturas");
+			$('#listasSola').html("");
+		}else{
+				// console.log(resp.saldoAnterior);
+				// console.log(resp.tabla);
+					$('#listasSola').html(resp.tabla);
+					$('#saldo').text(resp.saldoAnterior);
+				}
 	});
 
 }
@@ -376,7 +386,7 @@ function cargaSelect(){
 		dataType: 'json',
 	}).done(function(resp){
 
-		console.log(resp);
+		// console.log(resp);
 		$(resp.clientes).each(function(key, registro) {
 			$("#cliente").append('<option value="'+registro.id_persona+'">'+registro.nombre+'</option>');
 		});

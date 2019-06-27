@@ -17,7 +17,7 @@ if (!isset($_SESSION['Id'])) {
 <html lang="en" dir="ltr">
   <head>
 
-    <link rel="stylesheet" href="../css/Menu2.css">
+
     <script src="../librerias/fontawesome-V5/js/all.js"></script>
 
 
@@ -66,6 +66,8 @@ if (!isset($_SESSION['Id'])) {
 
                     <li><a href="compra_insumo.php"> Factura Compra</a></li>
 
+                    <li><a href="caja.php"> Caja </a></li>
+
                   </ul>
 
               </li>
@@ -98,6 +100,7 @@ if (!isset($_SESSION['Id'])) {
 
 
 <!-- aca estan todos los js que se nececitan para las paginas  -->
+  <link rel="stylesheet" href="../css/Menu2.css"/>
   <script src="../librerias/jquery/jquery-3.2.1.min.js"></script>
   <script src="../librerias/bootstrap/js/bootstrap.js"></script>
   <script src="../librerias/alertifyjs/alertify.min.js"></script>
