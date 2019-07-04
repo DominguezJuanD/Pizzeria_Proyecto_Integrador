@@ -89,9 +89,14 @@
         $desde = $desde." 00:00:00";
         $hasta = $hasta." 23:59:59";
 
-        $quey =mysqli_query($conexion,"SELECT sum(total) as total FROM encabezadofactura where fechaComprob < '$desde'");
-        $saldoAnterior=mysqli_fetch_array($quey);
-        $tabla['saldoAnterior'] = $saldoAnterior['total'];
+        $quey1 =mysqli_query($conexion,"SELECT sum(total) as debe FROM encabezadofactura where fechaComprob < '$desde' and tipoCompraVenta = '1'");
+        $saldo_debe=mysqli_fetch_array($quey1);
+
+        $quey2 =mysqli_query($conexion,"SELECT sum(total) as haber FROM encabezadofactura where fechaComprob < '$desde' and tipoCompraVenta = '2'");
+        $saldo_haber=mysqli_fetch_array($quey2);
+
+        $saldoAnterior = $saldo_debe['debe']- $saldo_haber['haber'];
+        $tabla['saldoAnterior'] = $saldoAnterior;
 
         $result_venta = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
                                           FROM encabezadofactura as ef
@@ -136,7 +141,7 @@
                   <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=2' target='_blank'>Detalle</a></td></tr>";
                   $total_compra+=$fila['total'];
                   }
-        $tabla['saldoTotal'] = $total + $total_compra;
+        $tabla['saldoTotal'] = $total - $total_compra + $saldoAnterior;
 
         if($total){
           $compra.= relleno($total_compra);
@@ -166,7 +171,7 @@
           $desde = $desde." 00:00:00";
           $hasta = $hasta." 23:59:59";
           $tabla = array();
-          $quey =mysqli_query($conexion,"SELECT sum(total) as total FROM encabezadofactura where fechaComprob < '$desde' and idCliente = '$cliente'");
+          $quey =mysqli_query($conexion,"SELECT sum(total) as total FROM encabezadofactura where fechaComprob < '$desde' and idCliente = '$cliente' ");
           $saldoAnterior=mysqli_fetch_array($quey);
           $tabla['saldoAnterior'] = $saldoAnterior['total'];
 
@@ -221,8 +226,58 @@
 
         break;
 
+// ========================================================== historial producto insumos ==============================================
 
-//=======================================================detalle de facturas ===============================================
+    case 'ingresoEngreso':
+        $query_producto = mysqli_query($conexion,"SELECT p.id_producto, p.descripcion,IFNULL(date_format(x.ultima_fecha,'%d/%m/%Y %H:%i%:%s'),0) as fecha, IFNULL(x.cantidad, 0) as cantidad, IFNULL(x.total_cant,0) as total_cant
+                                        From productos as p left JOIN ( SELECT df.id_producto, sum(df.cantidad) as total_cant ,max(ef.fechaComprob) as ultima_fecha, df.cantidad
+                                                                      from detallefactura as df INNER join encabezadofactura as ef on df.idFactura = ef.idFactura
+                                                                      where ef.tipoCompraVenta = 1 GROUP by df.id_producto ORDER by ef.fechaComprob) as x on p.id_producto = x.id_producto");
+
+
+                  while( $fila = $query_producto -> fetch_assoc()){
+
+                    $salida .="
+                    <tr bgcolor='white'>
+                    <td style='width:20%'>".$fila['descripcion']."</td>
+                    <td style='width:15%'>".$fila['fecha']."</td>
+                    <td style='width:5%'>".$fila['cantidad']."</td>
+                    <td style='width:5%'>".$fila['total_cant']."</td>
+                    <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='listaFactura.php?id=".$fila['id_producto']."&tipo=1' target='_blank'>Ver Fac.</a></td></tr>";
+                    // $venta.= relleno($total_compra);
+                    // $total+=$fila['total'];
+                    }
+                    $tabla['tabla'] = $salida;
+
+                    echo json_encode($tabla);
+
+    break;
+
+    case 'listaFacturas':
+        $producto = $_POST['id'];
+        $tipoComb = $_POST['tipocomprob'];
+
+        $query_producto = mysqli_query($conexion,"SELECT ef.* FROM encabezadofactura as ef
+                                                  INNER JOIN detallefactura as dt on ef.idFactura = dt.idFactura
+                                                  WHERE dt.id_producto = '$producto' and ef.tipoCompraVenta = '1'");
+
+        while( $fila = $query_producto -> fetch_assoc()){
+          $salida.="
+          <tr bgcolor='white'>
+          <td style='width:10%'> Fc: ".$fila['tipComprob']."</td>
+          <td style='width:40%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+          <td style='width:10%'>".$fila['usuario_carga']."</td>
+          <td style='width:20%'>".$fila['fecha']."</td>
+          <td style='width:10%'>".$fila['total']."</td>
+          <td style='width:10%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=1' target='_blank'>Detalle</a></td></tr>";
+          }
+
+          $tabla['tabla'] = $salida;
+
+          echo json_encode($tabla);
+
+    break;
+// =======================================================detalle de facturas ===============================================
       case 'detalleFactura':
         // $tabla = array();
         $id=$_POST['id'];

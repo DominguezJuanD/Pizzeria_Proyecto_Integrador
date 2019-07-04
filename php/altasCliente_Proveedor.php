@@ -36,7 +36,7 @@ if ($modo == 2) { // alta proveedores
 	$tipo = $_POST['tipo'];
 	$fe_in = $_POST['fe_in'];
 	$direccion = $_POST['direccion'];
-	$echo= false; 
+	$echo= false;
 	$sel = "SELECT cuit FROM persona WHERE cuit = '$cuit'";
 
 	$ejecutar = mysqli_query($conexion , $sel);
@@ -62,7 +62,7 @@ if($modo == 3){
 	$resultado = mysqli_fetch_array($consulta);
 	$codProducto = $resultado['id_producto']+1;
 
-	$sql = "INSERT INTO productos (id_producto,descripcion,precio) VALUES ('$codProducto','$descripcion','$precio')";
+	$sql = "INSERT INTO productos (descripcion,precio, baja_logica) VALUES ('$descripcion','$precio','1')";
 	$insertar = mysqli_query($conexion,$sql) or die ("No se pudo inserar el registro");
 
 }

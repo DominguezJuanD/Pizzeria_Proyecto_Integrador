@@ -255,7 +255,7 @@ function buscarFacturas(){
 }
 
 
-// =========================================================detalle de facturas =====================================
+// =========================================================detalle de facturas =========================================================================
 function detalleFactura(id,tipo){
 	console.log(tipo);
  console.log(id);
@@ -385,7 +385,33 @@ function desdeHastaCaja(){
 
 }
 
+function ingresoEngreso(){
 
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=ingresoEngreso',
+		dataType: 'json',
+	}).done(function(resp){
+			// console.log(resp.tabla);
+			$('#listas').html(resp.tabla);
+			// $('#listas1').html(resp.tabla1);
+	});
+
+}
+
+function listaFacturas(id){
+	$.ajax({
+		url:'../php/consultas.php',
+		type:'POST',
+		data: 'Boton=listaFacturas&id='+id,
+		dataType: 'json',
+	}).done(function(resp){
+			// console.log(resp.tabla);
+			$('#listas').html(resp.tabla);
+			// $('#listas1').html(resp.tabla1);
+	});
+}
 
 // ============================================================== facturas cliente proctos ================================================
 

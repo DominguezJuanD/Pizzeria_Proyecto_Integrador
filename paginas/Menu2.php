@@ -82,6 +82,9 @@ if (!isset($_SESSION['Id'])) {
                     <a href="clienteProductoFactura.php"> Cliente - Producto </a>
 
                     <a href="desdeHastaCaja.php"> Caja Desde-Hasta </a>
+
+                    <a href="historialEgresoIngreso.php"> Hist. Ingreso-Egreso </a>
+
                   </ul>
 
               </li>

@@ -26,12 +26,12 @@
 				<form id= "ProForm" class="form-horizontal">
 				<br>
 				<br>
-				  <div class="form-group">
+				  <!-- <div class="form-group">
 					<h4><label for="codProducto" class="col-sm-4 control-label">Cod. Producto</label></h4>
 				    <div class="col-sm-10">
 				      <input type="text" REQUIRED class="form-control" id="codProducto" placeholder="Ing. Código de Producto">
 				    </div>
-				  </div>
+				  </div> -->
 
 				   <div class="form-group">
 				    	<h4><label for="descripcion" class="col-sm-2 control-label">Descripción</label></h4>
