@@ -395,23 +395,23 @@ function ingresoEngreso(){
 	}).done(function(resp){
 			// console.log(resp.tabla);
 			$('#listas').html(resp.tabla);
-			// $('#listas1').html(resp.tabla1);
+			$('#listas1').html(resp.tabla1);
 	});
 
 }
 
-function listaFacturas(id){
-	$.ajax({
-		url:'../php/consultas.php',
-		type:'POST',
-		data: 'Boton=listaFacturas&id='+id,
-		dataType: 'json',
-	}).done(function(resp){
-			// console.log(resp.tabla);
-			$('#listas').html(resp.tabla);
-			// $('#listas1').html(resp.tabla1);
-	});
-}
+// function listaFacturas(id){
+// 	$.ajax({
+// 		url:'../php/consultas.php',
+// 		type:'POST',
+// 		data: 'Boton=listaFacturas&id='+id,
+// 		dataType: 'json',
+// 	}).done(function(resp){
+// 			// console.log(resp.tabla);
+// 			$('#listas').html(resp.tabla);
+// 			// $('#listas1').html(resp.tabla1);
+// 	});
+// }
 
 // ============================================================== facturas cliente proctos ================================================
 

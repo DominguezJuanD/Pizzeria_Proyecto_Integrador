@@ -21,12 +21,18 @@
   	  <table style="width:100%">
   	    <tr>
   	      <td style="width:50%" valign="top">
+
   						<fieldset>
   							<legend align="center" >Insumos</legend>
   							<form id="formulario">
   							<!-- Buscar Insumo <input type="text" name="Buscar" id="Buscar" >
   							<input type="button" value="Buscar"  onclick="buscar();" /> -->
-
+								<div class="atendio" style="float: left">
+									<b>Atendio: </b>
+									<input type="text"  value="<?echo $_SESSION['Nombre']?>" readonly="readonly">
+									<input type="text" name="id_usuario" value="<?echo $_SESSION['Id']?>" readonly="readonly" size="1">
+								</div>
+								<br><br>
   						<table style="width:100%" align="center">
   							<thead>
   								<tr>
@@ -54,6 +60,7 @@
   											<td <b>Precio : </b></td>
   											<td><input type="number" id="precio" value="0"></td>
   										</tr>
+											<br><br>
   										<tr>
   											<td align="right"> <br> <input class="btn btn-primary" role="button" type="button" value="Agregar" onclick="agregar_producto(2);" /></td>
   										</tr>
@@ -123,8 +130,9 @@
 										<td><input type="number" name="ivaC" id="ivaC" value="0"></td>
 									</tr>
   							</table>
-  							<input type="button" value="Limpiar"  onclick="limpiar();" />
-  							<input type="button" value="Guardar Factura" onclick="factura_compra_insumo(2);" />
+								<br>
+  							<input class="btn btn-danger" role="button" type="button" type="button" value="Limpiar"  onclick="limpiar();" />
+  							<input class="btn btn-success" role="button" type="button" value="Guardar Factura" onclick="factura_compra_insumo(2);" />
   						</form>
   					</fieldset>
   				</td>

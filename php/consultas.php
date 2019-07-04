@@ -14,8 +14,8 @@
 
         eliminarDetalleNovedad($tipoCompraVenta);
         echo "borrado";
-      break;
-//==================================================================INICIO DE SESION ==================================================
+    break;
+//=================================================================INICIO DE SESION =============================================================================
     case 'login':
       $Usuario = $_POST['usuario'];
       $Contrasena =$_POST['pass'];
@@ -32,7 +32,7 @@
       };
     break;
 
-  case 'logout':
+    case 'logout':
       session_destroy();
       echo TRUE;
     break;
@@ -51,7 +51,7 @@
               $datos['productos'] = $datos_producto;
               echo json_encode($datos);
     break;
-//=================================================busqueda de facturas ======================================================
+//=================================================================busqueda de facturas =========================================================================
     case 'buscarFacturas': // por nuemro de factura
       $numFactura = $_POST['numFactura'];
       $puntoVenta = $_POST['puntoVenta'];
@@ -77,92 +77,92 @@
           $tabla['tabla'] = $salida;
 
           echo json_encode($tabla);
-      break;
+    break;
+
+// ================================================================desde hasta por fecha ========================================================================
+    case 'desdeHasta': // por fecha desde hasta
+      $tipoComp = $_POST['tipofactura'];
+      // $desde = date_format($_POST['desde'],'%Y/%m/%d');
+      // $hasta = date_format($_POST['hasta'],'%Y/%m/%d');
+      $desde = $_POST['desde'];
+      $hasta = $_POST['hasta'];
+      $desde = $desde." 00:00:00";
+      $hasta = $hasta." 23:59:59";
+
+      $quey1 =mysqli_query($conexion,"SELECT sum(total) as debe FROM encabezadofactura where fechaComprob < '$desde' and tipoCompraVenta = '1'");
+      $saldo_debe=mysqli_fetch_array($quey1);
+
+      $quey2 =mysqli_query($conexion,"SELECT sum(total) as haber FROM encabezadofactura where fechaComprob < '$desde' and tipoCompraVenta = '2'");
+      $saldo_haber=mysqli_fetch_array($quey2);
+
+      $saldoAnterior = $saldo_debe['debe']- $saldo_haber['haber'];
+      $tabla['saldoAnterior'] = $saldoAnterior;
+
+      $result_venta = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
+                                        FROM encabezadofactura as ef
+                                        WHERE ef.tipoCompraVenta = '1'
+                                        and ef.fechaComprob between '$desde' and '$hasta'
+                                        ORDER BY ef.fechaComprob ASC");
+
+              while( $fila = $result_venta -> fetch_assoc()){
+
+                $venta .="
+                <tr bgcolor='white'>
+                <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
+                <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+                <td style='width:10%'>".$fila['usuario_carga']."</td>
+                <td style='width:10%'>".$fila['fecha']."</td>
+                <td style='width:10%'>".$fila['total']."</td>
+                <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=1' target='_blank'>Detalle</a></td></tr>";
+                // $venta.= relleno($total_compra);
+                $total+=$fila['total'];
+                }
+
+                if ($total) {
+                  $venta.= relleno($total);
+                }
 
 
-      case 'desdeHasta': // por fecha desde hasta
-        $tipoComp = $_POST['tipofactura'];
-        // $desde = date_format($_POST['desde'],'%Y/%m/%d');
-        // $hasta = date_format($_POST['hasta'],'%Y/%m/%d');
-        $desde = $_POST['desde'];
-        $hasta = $_POST['hasta'];
-        $desde = $desde." 00:00:00";
-        $hasta = $hasta." 23:59:59";
 
-        $quey1 =mysqli_query($conexion,"SELECT sum(total) as debe FROM encabezadofactura where fechaComprob < '$desde' and tipoCompraVenta = '1'");
-        $saldo_debe=mysqli_fetch_array($quey1);
+      $result = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
+                                        FROM encabezadofactura as ef
+                                        WHERE ef.tipoCompraVenta = '2'
+                                        and ef.fechaComprob between '$desde' and '$hasta'
+                                        ORDER BY ef.fechaComprob ASC");
 
-        $quey2 =mysqli_query($conexion,"SELECT sum(total) as haber FROM encabezadofactura where fechaComprob < '$desde' and tipoCompraVenta = '2'");
-        $saldo_haber=mysqli_fetch_array($quey2);
+              while( $fila = $result -> fetch_assoc()){
+                $compra.="
+                <tr bgcolor='white'>
+                <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
+                <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
+                <td style='width:10%'>".$fila['usuario_carga']."</td>
+                <td style='width:10%'>".$fila['fecha']."</td>
+                <td style='width:10%'>".$fila['total']."</td>
+                <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=2' target='_blank'>Detalle</a></td></tr>";
+                $total_compra+=$fila['total'];
+                }
+      $tabla['saldoTotal'] = $total - $total_compra + $saldoAnterior;
 
-        $saldoAnterior = $saldo_debe['debe']- $saldo_haber['haber'];
-        $tabla['saldoAnterior'] = $saldoAnterior;
+      if($total){
+        $compra.= relleno($total_compra);
+      }
+      if ($tipoComp == '1') {
+        $tabla['tabla'] = $venta;
+      }elseif ($tipoComp == '2') {
+        $tabla['tabla'] = $compra;
+      }else {
+        $tabla['tabla'] = $venta;
+        $tabla['tabla2'] = $compra;
+      }
 
-        $result_venta = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
-                                          FROM encabezadofactura as ef
-                                          WHERE ef.tipoCompraVenta = '1'
-                                          and ef.fechaComprob between '$desde' and '$hasta'
-                                          ORDER BY ef.fechaComprob ASC");
+      $tabla['tipo'] = $tipoComp;
 
-                while( $fila = $result_venta -> fetch_assoc()){
+      echo json_encode($tabla);
+    break;
 
-                  $venta .="
-                  <tr bgcolor='white'>
-                  <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
-                  <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
-                  <td style='width:10%'>".$fila['usuario_carga']."</td>
-                  <td style='width:10%'>".$fila['fecha']."</td>
-                  <td style='width:10%'>".$fila['total']."</td>
-                  <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=1' target='_blank'>Detalle</a></td></tr>";
-                  // $venta.= relleno($total_compra);
-                  $total+=$fila['total'];
-                  }
+// ================================================================ factura cliente producto ====================================================================
 
-                  if ($total) {
-                    $venta.= relleno($total);
-                  }
-
-
-
-        $result = mysqli_query($conexion,"SELECT date_format(ef.fechaComprob,'%d/%m/%Y %H:%i%:%s') as fecha, ef.*
-                                          FROM encabezadofactura as ef
-                                          WHERE ef.tipoCompraVenta = '2'
-                                          and ef.fechaComprob between '$desde' and '$hasta'
-                                          ORDER BY ef.fechaComprob ASC");
-
-                while( $fila = $result -> fetch_assoc()){
-                  $compra.="
-                  <tr bgcolor='white'>
-                  <td style='width:5%'> Fc: ".$fila['tipComprob']."</td>
-                  <td style='width:10%'>".rellegarCero($fila['puntoVenta'],4)."-".rellegarCero($fila['numComprob'],8)."</td>
-                  <td style='width:10%'>".$fila['usuario_carga']."</td>
-                  <td style='width:10%'>".$fila['fecha']."</td>
-                  <td style='width:10%'>".$fila['total']."</td>
-                  <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='detalleFactura.php?id=".$fila['idFactura']."&tipo=2' target='_blank'>Detalle</a></td></tr>";
-                  $total_compra+=$fila['total'];
-                  }
-        $tabla['saldoTotal'] = $total - $total_compra + $saldoAnterior;
-
-        if($total){
-          $compra.= relleno($total_compra);
-        }
-        if ($tipoComp == '1') {
-          $tabla['tabla'] = $venta;
-        }elseif ($tipoComp == '2') {
-          $tabla['tabla'] = $compra;
-        }else {
-          $tabla['tabla'] = $venta;
-          $tabla['tabla2'] = $compra;
-        }
-
-        $tabla['tipo'] = $tipoComp;
-
-        echo json_encode($tabla);
-      break;
-
-// ==================================================================== factura cliente producto =====================================================
-
-      case 'clienteProducto':
+    case 'clienteProducto':
           $tipoComb = $_POST['tipocomprob'];
           $cliente = $_POST['cliente'];
           $producto = $_POST['producto'];
@@ -223,10 +223,9 @@
                     $tabla['tabla'] = $salida;
 
                     echo json_encode($tabla);
+    break;
 
-        break;
-
-// ========================================================== historial producto insumos ==============================================
+// ================================================================ historial producto insumos ==================================================================
 
     case 'ingresoEngreso':
         $query_producto = mysqli_query($conexion,"SELECT p.id_producto, p.descripcion,IFNULL(date_format(x.ultima_fecha,'%d/%m/%Y %H:%i%:%s'),0) as fecha, IFNULL(x.cantidad, 0) as cantidad, IFNULL(x.total_cant,0) as total_cant
@@ -242,14 +241,42 @@
                     <td style='width:20%'>".$fila['descripcion']."</td>
                     <td style='width:15%'>".$fila['fecha']."</td>
                     <td style='width:5%'>".$fila['cantidad']."</td>
-                    <td style='width:5%'>".$fila['total_cant']."</td>
-                    <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='listaFactura.php?id=".$fila['id_producto']."&tipo=1' target='_blank'>Ver Fac.</a></td></tr>";
+                    <td style='width:5%'>".$fila['total_cant']."</td>";
+                    // <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='listaFactura.php?id=".$fila['id_producto']."&tipo=1' target='_blank'>Ver Fac.</a></td></tr>";
                     // $venta.= relleno($total_compra);
                     // $total+=$fila['total'];
                     }
                     $tabla['tabla'] = $salida;
 
-                    echo json_encode($tabla);
+
+
+
+
+        $query_insumos = mysqli_query($conexion,"SELECT ins.descripcion, IFNULL(date_format(x.ultima_fecha,'%d/%m/%Y %H:%i%:%s'),0) as fecha, x.cantidad_ingreso, ins.cant_vendido, ins.cantidad
+                                                from insumos as ins
+                                                LEFT join (SELECT df.id_producto, sum(df.cantidad) as cantidad_ingreso, MAX(ef.fechaComprob) as ultima_fecha
+                                                          from detallefactura as df INNER join encabezadofactura as ef on df.idFactura = ef.idFactura
+                                                          where ef.tipoCompraVenta = 2 GROUP by df.id_producto) as x on ins.id_insumo = x.id_producto");
+
+
+                    while( $fila = $query_insumos -> fetch_assoc()){
+
+                      $salida1 .="
+                      <tr bgcolor='white'>
+                      <td style='width:15%'>".$fila['descripcion']."</td>
+                      <td style='width:15%'>".$fila['fecha']."</td>
+                      <td style='width:5%'>".$fila['cantidad']."</td>
+                      <td style='width:5%'>".$fila['cantidad_ingreso']."</td>
+                      <td style='width:5%'>".$fila['cant_vendido']."</td>";
+                      // <td style='width:5%'><a type='button'  value='Ver Detalle' class='btn btn-danger btn-sm' href='listaFactura.php?id=".$fila['id_producto']."&tipo=1' target='_blank'>Ver Fac.</a></td></tr>";
+                      // $venta.= relleno($total_compra);
+                      // $total+=$fila['total'];
+                      }
+                      $tabla['tabla1'] = $salida1;
+
+
+
+                      echo json_encode($tabla);
 
     break;
 
@@ -275,10 +302,9 @@
           $tabla['tabla'] = $salida;
 
           echo json_encode($tabla);
-
     break;
-// =======================================================detalle de facturas ===============================================
-      case 'detalleFactura':
+// ================================================================detalle de facturas ==========================================================================
+    case 'detalleFactura':
         // $tabla = array();
         $id=$_POST['id'];
         $tipo = $_POST['tipo'];
@@ -325,8 +351,8 @@
           echo json_encode($tabla);
 
 
-      break;
-// =====================================================ingreso y egreso de caja================================
+    break;
+// ================================================================ingreso y egreso de caja======================================================================
     case 'ingreso_dinero':
       $fecha = date('Y/m/d H:i:s',time());
       // $ff= explode("/",$fecha);
@@ -335,9 +361,9 @@
       $usuario = $_SESSION['Id'];
       mysqli_query($conexion, "INSERT INTO iedinero(importe, tipo, concepto, fecha, usuario_carga) VALUES('$dinero','1','$justificar','$fecha','$usuario')");
       echo 'OK';
-      break;
+    break;
 
-      case 'egreso_dinero':
+    case 'egreso_dinero':
         $fecha = date('Y/m/d H:i:s',time());
         // $ff= explode("/",$fecha);
         $dinero = $_POST['dinero'];
@@ -345,10 +371,10 @@
         $usuario = $_SESSION['Id'];
         mysqli_query($conexion, "INSERT INTO iedinero(importe, tipo, concepto, fecha, usuario_carga) VALUES('$dinero','2','$justificar','$fecha','$usuario')");
         echo $dinero;
-        break;
+    break;
 
 
-      case 'caja_desde_hasta':
+    case 'caja_desde_hasta':
           $desde = $_POST['desde'];
           $hasta = $_POST['hasta'];
           $desde = $desde." 00:00:00";
@@ -391,16 +417,14 @@
           $array['tabla'] = $salida;
           $array['tabla1'] = $salida1;
           echo json_encode($array);
+    break;
 
 
-      break;
-
-
-// ========================================guardar factura tipo compra insumo ======================================================
+// ================================================================guardar factura tipo compra insumo ===========================================================
     case 'factura_compra_insumo':
 
       $fecha = date_format(date_create($_POST['fecha']),'Y/m/d');
-
+      $usuario_carga = $_POST['id_usuario'];
       $prove = $_POST['cliente_proveedor'];
       $formapago = $_POST['formapago'];
       $tipo_factura = $_POST['tipofactura'];
@@ -433,8 +457,8 @@
         $total = $total - $descuento;
         //el descuento lo hice general y no por producto kbe el chori
         //por ahora agrego 0 al iva, y compro como cons final
-        mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta)
-        VALUES('$tipo_factura','1','$num_factura','$fecha','$prove','$formapago','$totalNetoC','$iva','$totalC','$tipoCompraVenta')");//1-venta 2-compra
+        mysqli_query($conexion, "INSERT INTO encabezadofactura (tipComprob, puntoVenta, numComprob, fechaComprob, idCliente, formaPago, subtotal, iva, total, tipoCompraVenta, usuario_carga)
+        VALUES('$tipo_factura','1','$num_factura','$fecha','$prove','$formapago','$totalNetoC','$iva','$totalC','$tipoCompraVenta','$usuario_carga')");//1-venta 2-compra
 
         $idFactura = idFactura($tipo_factura,$num_factura, $tipoCompraVenta);
 
@@ -456,10 +480,9 @@
       }else {
         echo 0;
       }
-
-      break;
-// =================================================================guardar factura tipo venta productos ============================================
-      case 'factura_venta_producto':
+    break;
+// ================================================================guardar factura tipo venta productos =========================================================
+    case 'factura_venta_producto':
         $cont=0;
         $fecha = date('Y/m/d H:i:s',time());
         // $ff= explode("/",$fecha);
@@ -508,7 +531,7 @@
           for ($i=0; $i < sizeof($tabla_id); $i++) {
             if ($tabla_id[$i] > 0){
               $contRes = 0;
-              $insumoReceta = mysqli_query($conexion,"SELECT r.id_insumo, r.cantidad as cantidadRes, i.cantidad as cantidadIns
+              $insumoReceta = mysqli_query($conexion,"SELECT r.id_insumo, r.cantidad as cantidadRes, i.cantidad as cantidadIns, i.cant_vendido
                                                       FROM recetas  as r inner join insumos as i on r.id_insumo = i.id_insumo
                                                       where r.id_producto  ='$tabla_id[$i]'"); //busco el precio del insumo
 
@@ -516,6 +539,7 @@
 
                 $cantTotal = $reg_res['cantidadRes'] * $tabla_cant[$i]; //multiplico cantidad de insumo de la receta x cantidad de productos comprados
                 $cantResta[sizeof($cantResta)] =  $reg_res['cantidadIns'] - $cantTotal; //resto del stock de insumos la catidad que usa los productos que se vendieron
+                $cant_vendido_insumo[sizeof($cant_vendido_insumo)] =  $reg_res['cant_vendido'] + $cantTotal;
                 $arrayId_insumo[sizeof($arrayId_insumo)] = $reg_res['id_insumo'];
               }
 
@@ -529,6 +553,7 @@
 
           }
           descuentoInsumo($cantResta,$arrayId_insumo);
+          Cant_vendido_Insumo($cant_vendido_insumo,$arrayId_insumo);
 
           eliminarDetalleNovedad($tipoCompraVenta);
 
@@ -538,10 +563,10 @@
 
           echo 0;
         };
-        break;
+    break;
 
-// =================================================================guardar factura tipo venta-compra NOVEDAD ============================================
-        case 'facturaNovedad':
+// ================================================================guardar factura tipo venta-compra NOVEDAD ====================================================
+    case 'facturaNovedad':
           $option = $_POST['option'];
           $tipoCompraVenta = $_POST['tipoCompraVenta'];
           if ($option == '1') {
@@ -629,10 +654,10 @@
             $array['totalC'] = $totalC;
 
             echo json_encode($array);
-        break;
+    break;
 
-// =================================================================guardar Retas ============================================
-        case 'altaRecetas':
+// ================================================================guardar Retas ================================================================================
+    case 'altaRecetas':
           $option = $_POST['option'];
           $idProducto=$_POST['idProducto'];
 
@@ -670,9 +695,9 @@
             $array['tabla'] = $salida;
 
             echo json_encode($array);
-        break;
+    break;
 
-// ===============================================================================================================================================================================================
+// ==============================================================================================================================================================
     case 'factura_ya':
 
       $ulti = $_POST['num'];
@@ -699,13 +724,12 @@
       }else{
         echo FALSE;
       }
-      break;
+    break;
 
 
   }
 
-// ===========================================================funcion que busca el ultimo nuemro de factura ==============================================
-
+// ================================================================funcion que busca el ultimo nuemro de factura ================================================
   function ulti_factura($tipo,$tipoComb){
     include ('conexion.php');
     $registros=mysqli_query($conexion,"SELECT max(numComprob) as ultimo FROM encabezadofactura WHERE tipoCompraVenta = '$tipo' and tipComprob = '$tipoComb'");  //1- venta 2-compra
@@ -731,14 +755,19 @@
     return str_pad($valor, $long, '0', STR_PAD_LEFT);
   }
 
-  function descuentoInsumo($cantidadRes, $cantInsumo){
+  function descuentoInsumo($cantidadRes, $idInsumo){
     include ('conexion.php');
     for ($i=0; $i < sizeof($cantidadRes); $i++) {
-      mysqli_query($conexion, "UPDATE insumos SET cantidad = '$cantidadRes[$i]' WHERE id_insumo = '$cantInsumo[$i]'");
+      mysqli_query($conexion, "UPDATE insumos SET cantidad = '$cantidadRes[$i]' WHERE id_insumo = '$idInsumo[$i]'");
     }
-
-
   }
+    function Cant_vendido_Insumo($cantidadRes, $idInsumo){
+      include ('conexion.php');
+      for ($i=0; $i < sizeof($cantidadRes); $i++) {
+        mysqli_query($conexion, "UPDATE insumos SET cant_vendido = '$cantidadRes[$i]' WHERE id_insumo = '$idInsumo[$i]'");
+      }
+
+    }
 
   function relleno($total){
     $tabla="<tr>

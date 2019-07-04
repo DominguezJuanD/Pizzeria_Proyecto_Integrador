@@ -41,13 +41,13 @@
 												<thead>
 				                  <td style="width:20%">Descripcion</td>
 
-				                  <td style="width:15%">Fec. Ult. venta</td>
+				                  <td style="width:20%">Fec. Ult. venta</td>
 
 				                  <td style="width:5%"> Ultimas Vendidas </td>
 				                  <td style="width:5%">  total vendidas </td>
 				                  <!-- <td style="width:10%"> Total $ </td> -->
 
-				                  <td style="width:5%">________ </td>
+				                  <!-- <td style="width:5%">________ </td> -->
 												</thead>
 												<tbody  bgcolor="white" id="listas"></tbody>
 											</table>
@@ -57,15 +57,15 @@
 										<table>
 											<h5 align="center"><b>Insumos</b></h4>
 											<thead>
-												<td style="width:15%">Descripcion</td>
+												<td style="width:20%">Descripcion</td>
 
 												<td style="width:15%">Fec. Ult. venta</td>
 
-												<td style="width:5%"> Can. Ingreso </td>
-												<td style="width:5%"> Can. Salida </td>
-												<td style="width:5%"> Stock Actual</td>
+												<td style="width:5%"> Stock Actual </td>
+												<td style="width:5%"> Can. ingreso </td>
+												<td style="width:5%"> Can. Egreso</td>
 
-												<td style="width:5%">________ </td>
+												<!-- <td style="width:5%">________ </td> -->
 											</thead>
 											<tbody  bgcolor="white" id="listas1"></tbody>
 										</table>
