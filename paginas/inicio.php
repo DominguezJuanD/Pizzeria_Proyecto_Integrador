@@ -15,7 +15,7 @@ if (!isset($_SESSION['Id'])) {
 <style>
   body{
 
-    background-image: url('../img/fondo2.png');
+    background-image: url('../img/fondo3.jpg');
 
     background-position: center center;
     background-repeat: no-repeat;
@@ -24,7 +24,7 @@ if (!isset($_SESSION['Id'])) {
     /* -webkit-background-size: cover; */
     /* -moz-background-size: cover; */
     /* -o-background-size: cover; */
-    /* background-size: cover; */
+    background-size: cover;
     }
 </style>
 <body >

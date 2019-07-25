@@ -13,7 +13,7 @@ function login(){
 	}).done(function(resp){
 		if (resp) {
 			alert('login correcto');
-			window.location="paginas/Menu2.php";
+			window.location="paginas/inicio.php";
 		}else {
 			alert('error');
 		}
