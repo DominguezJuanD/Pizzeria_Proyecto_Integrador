@@ -28,7 +28,7 @@ if (!isset($_SESSION['Id'])) {
     <title>Baloo Pizza</title>
 
   </head>
-  <body>
+  <body >
 
 <!-- ----------------------------------------------------------------ESTILO DE PAGINA -------------------------------------------------------------------------------- -->
   <div class="fijo">
@@ -39,7 +39,7 @@ if (!isset($_SESSION['Id'])) {
         <nav>
           <ul class="nav">
 
-              <li><a href="Menu2.php"><i class="fas fa-home"></i> Inicio</a></li>
+              <li><a href="inicio.php"><i class="fas fa-home"></i> Inicio</a></li>
 
               <li><a href="listarClientes.php" ><i class="far fa-list-alt"></i> A.B.M's</a>
 
@@ -91,6 +91,9 @@ if (!isset($_SESSION['Id'])) {
               <ul class="cerrar">
 
                 <li><button class=" btn btn-warning" onclick="cerrarSesion();"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</button> </li>
+            </ul>
+            <ul>
+              <li> <a href="manual_de_usuario.html" target="_blank">Ayuda</a> </li>
             </ul>
 
           </ul>

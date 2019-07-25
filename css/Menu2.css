@@ -77,12 +77,13 @@ ul, ol{
 .contenido{
   height:  150px;
 }
-/* .cerrar{
+
+.cerrar{
   float: right;
   list-style-type: none;
   text-align: left;
   justify-content: right;
-} */
+}
 
 /* css para las tablas de las listas  */
 
@@ -92,19 +93,7 @@ ul, ol{
 	margin-right: auto;
 	}
 
-.ventana {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 5%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 2;
-    cursor: pointer;
-	}
+
 
 .tabla_datos{
 		border-radius: 180px;
